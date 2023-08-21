@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta content="text/html"/>
+    <meta charset="utf-8"/>
+    <title>美亞報工!</title>
+    <meta http-equiv="Content-Type" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" type="text/css" href="style.css" />
+     </head> 
+<style>
+      .main{
+        /*水平置中*/      
+        display:flex;
+        /*垂直置中*/
+        justify-content:center;
+        text-align:center;
+  }
+       .list{
+         /*水平置中*/      
+        display:flex;
+        /*垂直置中*/
+        justify-content:center;
+        text-align:center; 
+        border-radius: 2px; 
+        cellpadding ="0";
+        width ="100";        
+   }
+   
+  </style>
+  <body onload="loadBody()" >
+    <div class="main">
+      <h>
+        <img src="https://cdn.glitch.global/d3fc7112-b364-45f9-8eca-982543985e7b/logo21.png?v=1676527840620" width="280px"  height="120px"/><br/>  
+        <font size="6">絞毛頭機作業-讀取成品料號條碼</font>
+         <table style = "font-size:20px;">
+           <tr>
+            <td>
+                工令:<span id="order" ></span><br/>     
+                工號:<span  id="show1"></span>
+                姓名:<span id="show2"></span>
+                機台:<span id="show3"></span>
+                班別日期:<span id="show5"></span>
+                班別:<span id="show4"></span>                
+             </td>
+           </tr>  
+        </table>  
+      </h>  
+    </div>
+    
+      <div class="list">
+        <form>         
+          <table>
+            <tbody>                     
+              <tr>
+                <td><span  style="font-size:20px;color=blue"><center>成 品 鋼 管</center></span>
+                    <!-- input id ="goods"  type="text" style="width:250px;height:60px;font-size:20px;margin:0 auto;text-align:center" onchange="getPrdId()" / -->
+                    <select id="goods" name="sltOrd" style="width:350px;height:60px;font-size:18px" onchange="getPrdId()"></select></td>                     
+                <td><span   style="font-size:20px;color=blue"><center>末筆綑號/完成支數/應工支數</center></span>
+                    <input id ="lastBnd" type="text" readonly = "readonly" style="width:80px;height:60px;font-size:20px;text-align:center" />  
+                    <input id ="totPcs"  type="text" readonly = "readonly" style="width:80px;height:60px;font-size:20px;text-align:center" />
+                    <!-- label id="totPcs" style="width:80px;height:60px;font-size:20px;text-align:center">000</label -->
+                    <!-- label>/</label -->
+                    <input id ="cmdPcs"  type="text" readonly = "readonly" style="width:80px;height:60px;font-size:20px;text-align:center" />
+                    <!-- label id="cmdPcs" style="width:80px;height:60px;font-size:20px;text-align:center">000</label -->
+                    </td>
+                <td>
+                    <span  style="font-weight:bold;font-size:20px;color=blue"><center>接頭管件打勾</center></span>
+                    <input style="width:80px;height:30px;font-size:20px;text-align:center" type="checkbox" id="checkPrd01" size="01" />
+                    </td>
+              </tr>
+              <tr>
+              <td><span  style="font-size:25px;color=blue"><center>品 名</center></span>
+                  <textarea id ="name" type="text" readonly = "readonly" style="font-weight:bold;width:250px;height:60px;font-size:20px;margin:0 auto;text-align:center"></textarea></td>                     
+              <td><span   style="font-size:25px;color=blue"><center>規 格</center></span>
+                  <textarea id ="spec" type="text" readonly = "readonly" style="font-weight:bold;width:250px;height:60px;font-size:20px;text-align:left"></textarea></td>
+              </tr>
+              <tr>                                            
+                <td><span style="font-size:25px" color="blue"><center>支 數</center></span>
+                    <input id ="piece" type="number" style="width:250px;height:60px;font-size:20px;text-align:right"/></td>
+                <td><span style="font-size:25px" color="blue"><center>重 量</center></span>
+                    <input id ="weight" type="number"  style="width:250px;height:60px;font-size:20px; text-align: right" onchange="getPrdWeight()" /></td>          
+               </tr>
+               <tr>
+                 <td><input type="reset" value="重新輸入" onclick="reset()" style="width:250px;height:60px;font-size:20px;color:blue;background:#EFEFEF" /></td>
+                 <td><input type="button" id="perForm" value="資料上傳"  onclick="upLoad()" style="width:250px;height:60px;font-size:20px;color:green;background:#EFEFEF" /></td>
+               </tr>  
+             </tbody>
+           </table>
+        </form> 
+      </div>  
+    
+        <p>    
+          <center>
+             <input type="button" onclick="back()" value ="回前一頁"  style="width:250px;height:60px;font-size:20px; color:red;background:#EFEFEF"><br/><br/>                           
+             <script>
+              var txt ="日期:";
+              document.write(txt.big());           
+              date = new Date().toLocaleDateString();
+              document.write(date.big());
+            </script>
+          </center> 
+         </p>           
+       
+   <script>
+       
+        var strUrl = window.location.search; 
+        var getPara,paraVal;
+        var aryPara = [];
+        var userName;
+        var requestURL;
+        var pieceOutput;
+        var weightOutput;
+        var loadurl;
+        var request;
+        var steelId;
+        var jsonObj;
+        var dateStr;
+        var pieceStr;
+        var weightStr;    
+        var prtIdOutput;
+        var orderId0, orderId1, orderId2;
+        var urlSelect, defaultOption, optionSelect, requestSelect00, requestOnchange ;
+        var requestURL, orderId;  
+             
+        loadBody = function (){                         
+          if (strUrl != -1){
+             var getSearch = strUrl.split("?");
+             getPara = getSearch[1].split("&");
+               for (i = 0; i < getPara.length; i++){
+                  paraVal = getPara[i].split("=");
+                  aryPara.push(paraVal[0]);                
+                  aryPara[paraVal[0]]=paraVal[1];
+                  }                            
+                orderId0= aryPara.orderId;
+                orderId2= orderId0.toString().padEnd(12,'_');   
+                orderId1= orderId2.replace(/\_/g,""); 
+                orderId1= orderId2;
+                document.getElementById("show1").innerHTML=aryPara.userId;
+                userName = decodeURIComponent(aryPara.userName);
+                document.getElementById("show2").innerHTML=userName;
+                document.getElementById("show3").innerHTML=aryPara.machineId;
+                document.getElementById("show4").innerHTML=aryPara.groupId; 
+                document.getElementById("show5").innerHTML=aryPara.dateId;
+                document.getElementById("order").innerHTML=orderId0; 
+                orderId = orderId1; 
+                document.getElementById("goods").focus();
+
+             var dropdown      =  document.getElementById('goods');
+
+             defaultOption = document.createElement('option');
+             defaultOption.text = '選取在製品產品';
+             defaultOption.value = '';
+             dropdown.add( defaultOption );
+
+             urlSelect = "http://172.16.1.222:10010/web/services/WEB10R/" + "SLTB" + aryPara.machineId + aryPara.dateId + aryPara.groupId;
+
+             requestSelect00 = new XMLHttpRequest();
+             
+             requestSelect00.onreadystatechange = function(){
+             if (requestSelect00.readyState == 4  ) {
+                var dataSelect = JSON.parse(requestSelect00.responseText);
+                var j = -1;
+                for (let i = 0;  i < JSON.stringify(dataSelect.cmdPrdRecs.length); i++) {
+                    if  ( orderId0 === JSON.parse( JSON.stringify( dataSelect.cmdPrdRecs[i].cmdId ) ) ) {
+                        j = j + 1;
+                        optionSelect = document.createElement('option');
+                        optionSelect.text  = JSON.parse( JSON.stringify( dataSelect.cmdPrdRecs[i].cmdPrdSiz) );
+                        optionSelect.value = JSON.parse( JSON.stringify( dataSelect.cmdPrdRecs[i].cmdPrdId ) );
+                        dropdown.add(optionSelect);
+                        }
+                    }
+                defaultSelect();
+                }
+             }
+             console.log("urlSelect-->" + urlSelect);
+             requestSelect00.open("GET" , urlSelect, true);
+             requestSelect00.send();
+             }
+          }
+
+
+      //********************************************************
+      //*
+      //********************************************************
+        function defaultSelect(){
+          return;
+          }
+
+
+      //********************************************************
+      //*
+      //********************************************************
+        function reset(){
+          location.reload();
+          return;
+          }
+
+      //********************************************************
+      //*
+      //********************************************************
+        function getPrdWeight() { document.getElementById("perForm").focus(); }
+      
+      //********************************************************
+      //*
+      //********************************************************
+        function upLoad(){  
+
+            loadurl = "http://172.16.1.222:10010/web/services/WEB10R/";      //use any url that have json data 
+            dateStr = aryPara.dateId.replace(/\-/g,"");   
+            
+            var  chkPrd;
+            chkPrd = document.getElementById("goods").value ;
+              if ( chkPrd == ""){               
+                 alert("無此產品!!");
+                 location.reload();
+                 return;
+                 }       
+
+            pieceOutput = document.getElementById("piece").value;            
+              if (pieceOutput< 1 || pieceOutput > 99999){               
+                 alert("件數錯誤!!");
+                 location.reload();
+                 return;
+                 }             
+              else { 
+              pieceStr = pieceOutput.toString().padStart(5,0); }                                           
+                        
+            weightOutput = document.getElementById("weight").value;             
+              if ( weightOutput< 1 || weightOutput > 999999){                  
+                 alert("重量錯誤!!");
+                 location.reload();
+                 return;
+                 } 
+              else { 
+                 weightStr = weightOutput.toString().padStart(6,0);}               
+          
+              goodsId=document.getElementById("goods").value;
+        
+              goodsId = goodsId.toString().padEnd(26,'_');  
+  
+              var checkPrd = "_";         
+ 
+              if (document.getElementById("checkPrd01").checked) { checkPrd = "C"; }
+
+              url = loadurl +  aryPara.userId + aryPara.machineId + dateStr + aryPara.groupId + orderId + goodsId + pieceStr + weightStr +"ADD" + checkPrd;
+          
+            if(window.XMLHttpRequest){    
+              request=new XMLHttpRequest();                    //for Chrome, mozilla etc  
+              }                 
+              request.onreadystatechange = function(){
+                if (request.readyState == 4  ) {
+                   jsonObj = JSON.parse(request.responseText);      //JSON.parse() returns JSON object
+                   markOutput = jsonObj.oprPrdDta.prdMrkTxt1;
+                   reasonOutput = jsonObj.oprPrdDta.prdResTxt1;                                              
+                   prtIdOutput  = jsonObj.oprPrdDta.prdOrdId + jsonObj.oprPrdDta.prdOrdNo ;  
+                   var  tempCmdId = orderId0;    
+                     if (markOutput ==="SUC"){                       
+//                      alert(reasonOutput); 
+//                      location.reload();
+                        requestURL="http://172.16.2.47/webbi/app01/絞毛頭機作業/掛籤預覽列印.html";
+                        requestURL = requestURL+"?" + "orderId=" + tempCmdId + "&userId=" + aryPara.userId + "&userName=" + userName + "&machineId=" + aryPara.machineId +
+                           "&dateId=" + aryPara.dateId +"&groupId=" + aryPara.groupId + "&prtId=" + prtIdOutput + "&prdType=" + checkPrd;    
+                        var newWindow = window.open(requestURL,'_self'); 
+                        }           
+                      else 
+                        if (markOutput ==="FAU"){ 
+                           alert(reasonOutput); 
+                           location.reload();
+                           return;
+                           } 
+                   }     
+                 }
+              console.log("upload()-->" + url);
+              request.open("GET" , url, true);
+              request.send();                      
+            }    
+          
+          
+       function getPrdId(){  
+            var urlSplCoil = "http://172.16.1.222:10010/web/services/WEB10R/";      //use any url that have json data 
+            var requestOnchange;
+            var goodsSplId = document.getElementById("goods").value;
+            var goodsString = document.getElementById("goods").value; ;
+            var goodsUrl="";    
+            var goodsChar=""; 
+
+
+                                         
+            if (goodsSplId.length > 26){
+              alert("資料長度不符");
+              location.reload();
+              return;
+            }         
+               
+            if (goodsString.length < 27){                          
+              for (i = 1; i < 27 ; i++){
+                  j = i - 1;
+                  goodsChar = goodsString.substr(j , 1);
+                  if (goodsChar >="a" && goodsChar <="z") { goods= goodsUrl + goodsChar; }
+                     else if (goodsChar >="A" && goodsChar<="Z") { goodsUrl= goodsUrl + goodsChar; }
+                       else if (goodsChar >="0" && goodsChar<="9") { goodsUrl= goodsUrl + goodsChar; }
+                         else {goodsUrl = goodsUrl + "_"; }
+                  } 
+            }        
+               document.getElementById("show3").innerHTML=aryPara.machineId;
+               document.getElementById("show4").innerHTML=aryPara.groupId; 
+               document.getElementById("show5").innerHTML=aryPara.dateId;
+
+            urlSplCoil = urlSplCoil + orderId + goodsUrl + aryPara.machineId + aryPara.dateId + aryPara.groupId ;
+
+
+            console.log("urlSplCoil-->" + urlSplCoil );
+
+            if(window.XMLHttpRequest){    
+              requestOnchange=new XMLHttpRequest();                    //for Chrome, mozilla etc  
+              }                 
+              requestOnchange.onreadystatechange = function(){
+                if (requestOnchange.readyState == 4  ){
+                   var jsonSplObj01   = JSON.parse(requestOnchange.responseText);      //JSON.parse() returns JSON object  
+                   var markOutput01   = jsonSplObj01.chkPrdDta.prdMrkTxt;
+                   var reasonOutput01 = jsonSplObj01.chkPrdDta.prdResTxt;
+                     if (markOutput01 ==="SUC"){ 
+//                      document.getElementById("goods").value       = goodsUrl;
+                        document.getElementById("name").value        = jsonSplObj01.chkPrdDta.prdSpec;
+                        document.getElementById("spec").value        = jsonSplObj01.chkPrdDta.prdSize;
+                        document.getElementById("piece").value       = jsonSplObj01.chkPrdDta.prdPcsx0; 
+                        document.getElementById("lastBnd").value     = jsonSplObj01.chkPrdDta.prdLastNo;
+                        document.getElementById("cmdPcs").value      = jsonSplObj01.chkPrdDta.prdCmdPcs; 
+                        document.getElementById("totPcs").value      = jsonSplObj01.chkPrdDta.prdTotPcs;
+//                      document.getElementById("cmdPcs").innerHTML  = jsonSplObj01.chkPrdDta.prdCmdPcs;
+//                      document.getElementById("totPcs").innerHTML  = jsonSplObj01.chkPrdDta.prdTotPcs;
+                        document.getElementById("weight").focus();
+                        }                              
+                     else 
+                       if(markOutput01 ==="FAU"){
+                         alert(reasonOutput01);
+                         location.reload();
+                         return;
+                         }                          
+                     }                                               
+                }
+               requestOnchange.open("GET" , urlSplCoil , true );
+               requestOnchange.send();  
+            }           
+          
+     
+          function back(){                                      
+            requestURL="http://172.16.2.47/webbi/app01/絞毛頭機作業/讀取工令.html";
+            requestURL = requestURL+"?" + "userId=" + aryPara.userId + "&userName=" + userName + "&machineId=" + aryPara.machineId +
+                         "&dateId=" + aryPara.dateId +"&groupId=" + aryPara.groupId;    
+            var newWindow=window.open(requestURL,'_self');
+            }  
+                              
+    </script>  
+    </body>
+  </html>

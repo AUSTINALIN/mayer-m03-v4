@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta content="text/html"/>
+    <meta charset="utf-8"/>
+    <title>美亞報工!</title>
+    <meta http-equiv="Content-Type" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" type="text/css" href="style.css" />
+     </head> 
+<style>
+      .main {
+        /*水平置中*/      
+        display:flex;
+        /*垂直置中*/
+        justify-content:center;
+        text-align:center;
+  }
+       .list{
+         /*水平置中*/      
+        display:flex;
+        /*垂直置中*/
+        justify-content:center;
+        text-align:center;
+        border-radius: 2px;  
+    }
+        
+  </style>
+  <body onload="loadBody()">
+    <div class="main">   
+      <h> 
+        <img src="https://cdn.glitch.global/d3fc7112-b364-45f9-8eca-982543985e7b/logo21.png?v=1676527840620" width="280px"  height="120px"/><br/>  
+        <font size="6">絞毛頭機作業-讀取工令</font><br/><br/>
+         <table style = "font-size:20px;">
+           <tr>
+            <td>
+                工號:<span  id="show1"></span>
+                姓名:<span id="show2"></span>
+                機台:<span id="show3"></span>
+                班別日期:<span id="show5"></span>
+                班別:<span id="show4"></span>                
+             </td>
+           </tr>  
+        </table>  
+      </h>
+    </div> 
+    
+      <div class="list">
+        <form>         
+          <table>                        
+             <tbody>
+               <tr>
+                 <td><span style="font-size:25px" color="blue"><center>選取工令</center></span></td>
+                 <!-- td><input style="width:200px;height:60px;font-size:20px"  placeholder="請輸入工令號碼" id="order" onchange="redOnchange()" /></td -->  
+                 <td><select id="sltOrd01" name="sltOrd" style="width:220px;height:60px;font-size:20px" onchange="redOnchange()"></select></td>
+               </tr>
+               <!-- tr>
+                 <td><input type="reset" value ="重新輸入" style="width:200px;height:60px;font-size:20px;color:blue;background:#EFEFEF"></td>
+                 <td><input  type="button" id="perForm" value="確認執行" onclick="load()" style="width:200px;height:60px;font-size:20px;color:green;background:#EFEFEF"></td>
+               </tr -->  
+             </tbody>
+           </table>
+        </form> 
+      </div>
+        
+        <p>   
+          <center>
+            <input type="button" onclick="back()" value ="回前一頁"  style="width:200px;height:60px;font-size:20px; color:red;background:#EFEFEF"><br/><br/>                      
+            <script>
+              var txt ="日期:";
+              document.write(txt.big());           
+              date = new Date().toLocaleDateString();
+              document.write(date.big());
+             </script>
+          </center>  
+        </p>           
+  
+   <script content-type="text/javascript">
+       
+        var strUrl = window.location.search;  
+        var getPara,paraVal;
+        var aryPara = [];
+        var aryOrder = [];
+        var userName;
+        var requestURL;  
+        var url, request;
+        var orderOutput, orderId;    
+        var urlSelect, defaultOption, optionSelect, requestSelect00 ;
+        var requestURL, orderId;  
+	
+        //**********************************************
+        //* 進入網頁即刻執行            
+        //**********************************************
+        function loadBody(){                         
+          if (strUrl != -1)
+            var getSearch = strUrl.split("?");
+            getPara = getSearch[1].split("&");
+              for (i = 0; i < getPara.length; i++){
+                 paraVal = getPara[i].split("=");
+                 aryPara.push(paraVal[0]);                
+                 aryPara[paraVal[0]]=paraVal[1];
+               }              
+                    
+               document.getElementById("show1").innerHTML=aryPara.userId;
+               userName = decodeURIComponent(aryPara.userName);
+               document.getElementById("show2").innerHTML=userName;
+               document.getElementById("show3").innerHTML=aryPara.machineId;
+               document.getElementById("show4").innerHTML=aryPara.groupId;  
+               document.getElementById("show5").innerHTML=aryPara.dateId;
+               document.getElementById("sltOrd01").focus();
+
+           var dropdown      =  document.getElementById('sltOrd01');
+
+           defaultOption = document.createElement('option');
+           defaultOption.text = '選取現行運作工令';
+           defaultOption.value = '';
+           dropdown.add( defaultOption );
+
+           urlSelect = "http://172.16.1.222:10010/web/services/WEB10R/" + "SLTA" + aryPara.machineId + aryPara.dateId + aryPara.groupId;
+           requestSelect00 = new XMLHttpRequest();
+           
+           requestSelect00.onreadystatechange = function(){
+           if (requestSelect00.readyState == 4  ) {
+              var dataSelect = JSON.parse(requestSelect00.responseText);
+              for (let i = 0;  i < JSON.stringify(dataSelect.cmdPrdRecs.length); i++) {
+                  optionSelect = document.createElement('option');
+                  optionSelect.text  = JSON.parse( JSON.stringify(dataSelect.cmdPrdRecs[i].cmdIdCus) );
+                  optionSelect.value = JSON.stringify(dataSelect.cmdPrdRecs[i].cmdId).replace(/"/g, "") ;
+                  dropdown.add(optionSelect);
+                  }
+              }
+           }
+           requestSelect00.open("GET" , urlSelect, true);
+           requestSelect00.send();
+           }
+
+
+        //**********************************************
+        //* onchange 後執行 redfineOnchange()           *
+        //**********************************************
+          function redOnchange(){  
+
+       //     document.getElementById("perForm").focus();
+
+       //     orderOutput = document.getElementById("order").value;
+
+              orderId     = document.getElementById("sltOrd01").value;           
+              load();
+
+       //  
+       //   if ("PM-" != orderOutput.substr(0, 3)){      
+       //      alert("資料不符");
+       //      location.reload();}             
+       //     else {
+       //          orderId  = orderOutput.substr(3,12);              
+       //                                        
+       //     orderId = orderId.replaceAll(" ",""); 
+       //     document.getElementById("order").value = orderId;
+       //
+       //     orderId= orderId.toString().padEnd(12,'_');    
+       //     document.getElementById("perForm").focus();}
+
+           }
+     
+
+        //**********************************************
+        //* 按下確認執行即執行 load() 確認工令存在與否      *
+        //**********************************************
+          function load(){  
+            var  chkOrder;
+            chkOrder = document.getElementById("sltOrd01").value;
+
+            if ( chkOrder == "" ){               
+               alert("工令錯誤!!");
+               location.reload();
+               return;
+               }       
+
+            url = "http://172.16.1.222:10010/web/services/WEB10R/";      //use any url that have json data 
+
+        //  orderOutput = document.getElementById("order").value;            
+        //  
+        //  if ("PM-" === orderOutput.substr(0, 3)){
+        //     orderId  = orderOutput.substr(3,12);
+        //     }
+        //                                     
+        //  orderId = orderId.replaceAll(" ",""); 
+        //  document.getElementById("order").value = orderId;
+        //
+        //  orderId= orderId.toString().padEnd(12,'_');    
+        //  
+        //  url = url + orderId;
+        //              
+        //  if(window.XMLHttpRequest){    
+        //    request=new XMLHttpRequest();                    //for Chrome, mozilla etc  
+        //    }                 
+        //     request.onreadystatechange = function(){
+        //       if (request.readyState == 4  ) 
+        //         {
+        //            var jsonObj = JSON.parse(request.responseText);      //JSON.parse() returns JSON object
+        //            let reasonOutput= jsonObj.jobCmdDta.reasonTxt;                   
+        //            let markOutput= jsonObj.jobCmdDta.markTxt;
+        //              if (markOutput ==="SUC"){           
+                           let requestURL ="http://172.16.2.47/webbi/app01/絞毛頭機作業/讀取成品料號條碼.html";
+                           requestURL = requestURL+"?" + "userId=" + aryPara.userId + "&userName=" + userName + "&machineId=" + aryPara.machineId +
+                                        "&dateId=" + aryPara.dateId +"&groupId=" + aryPara.groupId+"&orderId=" + orderId;  
+                           var newWindow=window.open(requestURL,'_self');                                           
+        //              } else 
+        //                if(markOutput ==="FAU"){
+        //                  alert(reasonOutput);
+        //                  location.reload();}                          
+        //          }                                               
+        //      }
+        //       request.open("GET" , url, true);
+        //       request.send();  
+           }
+     
+
+        //**********************************************
+        //* 回前頁            
+        //**********************************************
+          function back(){                                        
+             requestURL="http://172.16.2.47/webbi/app01/絞毛頭機作業/絞毛頭機作業.html";
+             requestURL = requestURL+"?" + "userId=" + aryPara.userId + "&userName=" + userName + "&machineId=" + aryPara.machineId +
+                       "&dateId=" + aryPara.dateId +"&groupId=" + aryPara.groupId;    
+             var newWindow=window.open(requestURL,'_self');}              
+                             
+      </script>  
+    </body>
+  </html>

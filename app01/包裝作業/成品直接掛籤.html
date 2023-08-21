@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta content="text/html"/>
+    <meta charset="utf-8"/>
+    <title>美亞報工!</title>
+    <meta http-equiv="Content-Type" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" type="text/css" href="style.css" />
+     </head> 
+<style>
+      .main{
+        /*水平置中*/      
+        display:flex;
+        /*垂直置中*/
+        justify-content:center;
+        text-align:center;
+  }
+       .list{
+         /*水平置中*/      
+        display:flex;
+        /*垂直置中*/
+        justify-content:center;       
+        border-radius: 2px;  
+    }      
+      
+  </style>
+  <body onload="loadBody()">
+    <div class="main">
+      <h>
+        <img src="https://cdn.glitch.global/d3fc7112-b364-45f9-8eca-982543985e7b/logo21.png?v=1676527840620" width="300px"  height="150px"/><br/>
+        <font size="6">包裝作業-成品直接掛籤</font>
+         <table style = "font-size:20px;">
+           <tr>
+            <td>
+                工號:<span  id="show1"></span>
+                姓名:<span id="show2"></span>
+                機台:<span id="show3"></span>
+                班別日期:<span id="show5"></span>
+                班別:<span id="show4"></span>                
+             </td>
+           </tr>  
+        </table>  
+      </h>  
+    </div>  
+    <div class="list">
+      <form id = "myForm">        
+        <table>
+          <tbody>
+            <tr>                                  
+              <td>
+                <span style="font-size:25px" color="blue">成品直接掛籤(在製品條碼)</span>
+                <input  id="goods" style="width:320px;height:60px;font-size:20px"  placeholder="請輸入在製掛籤條碼" onchange="getSplId()"/><br/>
+                <label><span style="font-size:25px;text-align:left" color="blue">在製捆號</span></label>
+                <input  id="prdBnd" style="font-weight:bold;width:320px;height:40px;font-size:20px;text-align:left" readonly /><br>
+                <label><span style="font-size:25px" color="blue">產品編號</span></label>
+                <input  id="prdId" style="font-weight:bold;width:320px;height:40px;font-size:20px" readonly /><br/>
+                <label><span style="font-size:25px" color="blue">產品品名</span></label>
+                <input  id="prdSpec" style="font-weight:bold;width:320px;height:40px;font-size:20px" readonly /><br/>
+                <label><span style="font-size:25px" color="blue">產品尺寸</span></label>
+                <input  id="prdSize" style="font-weight:bold;width:320px;height:40px;font-size:20px" readonly /><br/>
+              </td>
+            </tr>            
+            <tr>
+              <td><span style="font-size:25px" color="blue">件數</span>
+                  <input id ="piece" type="number" style="width:200px;height:60px;font-size:20px;text-align:right"/>
+                  <span style="font-size:25px" color="blue">重量</span>
+                  <input id ="weight" type="number" style="width:200px;height:60px;font-size:20px; text-align: right"/>
+              </td>
+            </tr>
+            <tr>
+              <td><input type="button"  value ="重新輸入" onclick="myFunction()"  style="width:200px;height:60px;font-size:20px; color:blue;background:#EFEFEF">
+                  <input type="button"  value="資料上傳"  onclick="load()" style="width:200px;height:60px;font-size:20px;color:green;background:#EFEFEF"></td>       
+            </tr>
+          </tbody>
+        </table>
+      </form>  
+    </div>
+    <div class="foot">
+      <p>
+         <center>     
+           <input type="button" onclick="back()" value ="回前一頁"  style="width:200px;height:60px;font-size:20px; color:red;background:#EFEFEF"><br/><br/>               
+           <script>
+              var txt ="日期:";
+              document.write(txt.big());           
+              date = new Date().toLocaleDateString();
+              document.write(date.big());
+            </script>
+        </center>  
+      </p>           
+    </div>
+   
+   <script>
+       
+        var strUrl = window.location.search;  
+        var getPara,paraVal;
+        var aryPara = [];
+        var userName;
+        var requestURL;
+        var pieceOutput;
+        var weightOutput;
+        var loadurl;
+        var request;     
+        var jsonObj;
+        var dateStr;
+        var pieceStr;
+        var docId;
+        var numId;
+        var prodId;
+        var orderId;         
+        var goodsSplId;
+                 
+        
+        
+        function loadBody(){                         
+          if (strUrl != -1)
+            var getSearch = strUrl.split("?");
+            getPara = getSearch[1].split("&");
+              for (i = 0; i < getPara.length; i++){
+                 paraVal = getPara[i].split("=");
+                 aryPara.push(paraVal[0]);                
+                 aryPara[paraVal[0]]=paraVal[1];
+               }              
+                    
+               document.getElementById("show1").innerHTML=aryPara.userId;
+               userName = decodeURIComponent(aryPara.userName);
+               document.getElementById("show2").innerHTML=userName;
+               document.getElementById("show3").innerHTML=aryPara.machineId;
+               document.getElementById("show4").innerHTML=aryPara.groupId; 
+               document.getElementById("show5").innerHTML=aryPara.dateId; 
+               document.getElementById("goods").focus();
+         }
+     
+
+        function load(){  
+          loadurl = "http://172.16.1.222:10010/web/services/WEB10R/";      //use any url that have json data   
+          pieceOutput = document.getElementById("piece").value;
+          weightOutput = document.getElementById("weight").value;
+            if(pieceOutput > 99999 || weightOutput > 999999)
+              {alert("件數或重量錯誤!");
+              location.reload();
+              document.getElementById("goods").focus();  }                                                                                                                                           
+            else{
+              pieceStr =  pieceOutput.toString().padStart(5,'0');
+              weightStr =  weightOutput.toString().padStart(6,'0');              
+              var Uploadurl = loadurl + "AD1" + aryPara.userId + docId + numId + 
+                  aryPara.dateId +  orderId +  prodId + pieceStr + weightStr +aryPara.machineId + aryPara.groupId ;  
+            }
+           if(window.XMLHttpRequest){    
+             requestUpload=new XMLHttpRequest();  //資料上傳                                                                  
+             requestUpload.onreadystatechange = function(){
+               if (requestUpload.readyState == 4  ) 
+                 {
+                  jsonObj = JSON.parse(requestUpload.responseText);      //JSON.parse() returns JSON object
+                  markOutput = jsonObj.oprPrdDtax.prdMrkTxt2;  
+                  reasonOutput = jsonObj.oprPrdDtax.prdResTxt2;  
+                     if(markOutput ==="SUC"){ 
+                       alert(reasonOutput); 
+                       location.reload();  
+                       document.getElementById("goods").focus();
+                       return;                     
+                     }                                                   
+                     else 
+                       if(markOutput ==="FAU"){
+                         alert(reasonOutput);
+                         location.reload();  
+                         document.getElementById("goods").focus();
+                         } 
+                  }        
+                 }
+                 requestUpload.open("GET"   , Uploadurl, true);
+                 requestUpload.send();                      
+            }    
+        }
+
+
+          function getSplId(){       
+            goodsSplId=document.getElementById("goods").value;             
+            docId = goodsSplId.substr(4,3);  
+            numId = goodsSplId.substr(8,9);  
+            orderId = goodsSplId.substr(31,12);
+            prodId = goodsSplId.substr(44,26);
+            var pieceId = goodsSplId.substr(18,5);            
+            var weightId = goodsSplId.substr(24,6);  
+          
+            if (goodsSplId.length != 103){
+               alert("資料長度不符");
+               location.reload(); 
+               document.getElementById("goods").focus();
+               return;
+               }                                      
+            else {
+              pieceId = pieceId.replace(/^0+/g,"");           
+              document.getElementById("piece").value = pieceId;           
+              weightId = weightId.replace(/^0+/g,"");
+              document.getElementById("weight").value= weightId;
+              prdLoad();
+              document.getElementById("goods").value = goodsSplId.substr(4,13);
+              }
+            }          
+         
+
+          //***************************************************************
+          //* 開頁後 onchange 執行功能, 使用 getAllPrdx(24) API
+          //*************************************************************** 
+          function prdLoad(){
+            var getPrdIdUrl = "http://172.16.1.222:10010/web/services/WEB10R/" + orderId + prodId + aryPara.machineId + aryPara.dateId + aryPara.groupId;
+            var getWipLbl   = document.getElementById("goods").value.substr(100,3);
+            if(window.XMLHttpRequest){    
+              var requestSplId=new XMLHttpRequest();                    //for Chrome, mozilla etc  
+              }                 
+              requestSplId.onreadystatechange = function(){
+                if (requestSplId.readyState == 4  ){
+                   var jsonSplObj = JSON.parse(requestSplId.responseText);      //JSON.parse() returns JSON object  
+                   var markOutput = jsonSplObj.chkPrdDta.prdMrkTxt;
+                   var reasonOutput = jsonSplObj.chkPrdDta.prdResTxt;
+                     if (markOutput ==="SUC"){ 
+                        document.getElementById("prdId").value   = jsonSplObj.chkPrdDta.prdId;
+                        document.getElementById("prdSpec").value = jsonSplObj.chkPrdDta.prdSpec;
+                        document.getElementById("prdSize").value = jsonSplObj.chkPrdDta.prdSize;
+                        document.getElementById("prdBnd").value  = getWipLbl.replace(/\b(0+)/gi,"");
+                        document.getElementById("weight").focus();
+                        }                              
+                     else 
+                       if(markOutput ==="FAU"){
+                         alert(reasonOutput);
+                         location.reload();
+                         document.getElementById("goods").focus();
+                         return;
+                         }                          
+                     }                                               
+                }
+               requestSplId.open("GET" , getPrdIdUrl , true );
+               requestSplId.send();  
+            }             
+
+         function myFunction() {
+         document.getElementById("myForm").reset();
+         document.getElementById("goods").focus();  
+         } 
+
+          function back(){                                        
+            requestURL="http://172.16.2.47/webbi/app01/包裝作業/包裝作業.html";
+            requestURL = requestURL+"?" + "userId=" + aryPara.userId + "&userName=" + userName + "&machineId=" + aryPara.machineId +
+                         "&dateId=" + aryPara.dateId +"&groupId=" + aryPara.groupId;    
+            var newWindow=window.open(requestURL,'_self');}
+   
+    </script>  
+    </body>
+  </html>

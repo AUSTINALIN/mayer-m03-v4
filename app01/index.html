@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta content="text/html"/>
+    <meta charset="utf-8"/>
+    <meta http-equiv="cache-control" content="no-cache" />
+    <title>美亞報工!</title>
+    <meta http-equiv="Content-Type" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" type="text/css" href="style.css" />
+   <style>
+      .main {
+        /*水平置中*/      
+        display:flex;
+        /*垂直置中*/
+        justify-content:center;
+        text-align:center;       
+    }
+       .list{
+         /*水平置中*/      
+        display:flex;
+        /*垂直置中*/
+        justify-content:center;        
+        text-align:center;
+        border-radius: 2px;
+    }    
+    
+  </style>
+  </head>
+  
+  <body>
+     <div class="main">
+       <h>        
+         <img src="https://cdn.glitch.global/d3fc7112-b364-45f9-8eca-982543985e7b/logo21.png?v=1676527840620" width="280px"  height="120px"/><br/>              
+         <font size="6">工廠報工作業</font></h></div>  
+    
+     <div class="list" >  
+      <form>       
+        <table>  
+          <tbody>
+            <tr>
+              <td><font size="5">使用者代號รหัสงาน</font><br/>
+                  <input style="width:200px;height:60px;font-size:20px" type="text" placeholder="使用者條碼" id="user" onchange ="getPrdId()"></td>                                    
+              <td><font size="5">機台代號</font><br/>            
+                <select  id="machine" style="width:200px;height:60px;font-size:20px" >
+                  <option value="">請選擇機台</option>
+                  <option value="M01">M01(１號製管)</option>
+                  <option value="M02">M02(２號製管)</option>
+                  <option value="M03" selected>M03(３號製管)</option>
+                  <option value="M05">M05(５號製管)</option>
+                  <option value="M09">M09(９號製管)</option>
+                  <option value="M10">M10(１０號製管)</option>
+                  <option value="Z10">Z10(包裝處)</option>
+                </select>
+              </td>
+            </tr>          
+            <tr>
+              <td><font size="5">班別日期</font><br/>
+                  <input style="width:200px;height:60px;font-size:20px"  type= "date"  id="sysdate" ></td>               
+              <td><font size="5">班別</font><br/>            
+                <select  id="group" style="width:200px;height:60px;font-size:20px">
+                  <option value="">請選擇班別</option>
+                  <option value="A1" selected>A1(07:00--15:30)</option>
+                  <option value="A2">A2(15:30--24:00)</option>
+                  <option value="A3">A3(24:00--07:00)</option>
+                  <option value="B1">B1(07:00--19:00)</option>
+                  <option value="B2">B2(19:00--07:00)</option>       
+                </select><br/>
+              </td>  
+            </tr>
+            <tr>
+              <td><input type="button"  value ="重新輸入"  onclick="reset00()" style="width:200px;height:60px;font-size:20px;color:blue;background:#EFEFEF"></td>
+              <td><input type="button" id ="perForm" value="確認執行" onclick="load()" style="width:200px;height:60px;font-size:20px;color:green;background:#EFEFEF" ></td>
+            </tr>  
+          </tbody> 
+         </table>
+       </form>     
+    </div>
+      
+     <p>
+        <center>
+          <script>
+            var txt = "日期:";
+            document.write(txt.big());       
+            date = new Date().toLocaleDateString();
+            document.write(date.big());
+            document.getElementById("user").focus();
+         </script>
+       </center>  
+      </p>
+     
+    <!JavaScript-->
+    <script type="text/javascript">  
+       window.onload = function (){
+                      getToday();
+                      }
+
+        function getToday(){
+          var date  = new Date();
+          var day   = date.getDate();
+          var month = date.getMonth() + 1;
+          var year  = date.getFullYear();
+
+          if (month < 10) month = "0" + month;
+          if (day   < 10) day   = "0" + day;
+
+          var today = year + "-" + month + "-" + day;       
+          document.getElementById("sysdate").value = today;
+          }
+ 
+       function reset00(){
+          location.reload();           
+       }
+       
+       function getPrdId(){
+          document.getElementById("perForm").focus();}
+       
+        function load(){  
+        var url = "http://172.16.1.222:10010/web/services/WEB11R/";      //use any url that have json data  
+        var request;  
+        var x=document.getElementById("user").value;  
+        var y=document.getElementById("machine").value;
+        var z=document.getElementById("group").value;            
+        var d=document.getElementById("sysdate").value;  
+        document.getElementById("user").focus;       
+                                     
+        var url = url + x;
+          
+        if (x.length != 9) { alert("字數不符 9 位數 !!");  }
+          
+        if (y.length == "") { alert("請選擇機台 !!"); 
+                            return false;}
+          
+        if (z.length == "") { alert("請選擇班別 !!"); 
+                            return false;}   
+                              
+          if(window.XMLHttpRequest){    
+           request=new XMLHttpRequest();                    //for Chrome, mozilla etc  
+           }    
+                    
+          d = d.replace(/\-/g,"");
+          
+          request.onreadystatechange = function(){
+             if (request.readyState == 4  )  
+               {  
+                var jsonObj = JSON.parse(request.responseText);      //JSON.parse() returns JSON object                
+                var empOutput= jsonObj.chkInm27reca.empId;
+                var nameOutput= jsonObj.chkInm27reca.empName;
+                let requestURL="http://172.16.2.47/webbi/app01/主要作業.html";           
+                    requestURL = requestURL+"?" + "userId=" + empOutput + "&userName=" + nameOutput + "&machineId=" + y +
+                    "&dateId=" + d +"&groupId=" + z;                  
+                var newWindow=window.open(requestURL,'_self');               
+                 }                   
+            }     
+          request.open("GET" , url, true);
+          request.send();     
+         }                  
+    </script>  
+  </body>       
+</html>

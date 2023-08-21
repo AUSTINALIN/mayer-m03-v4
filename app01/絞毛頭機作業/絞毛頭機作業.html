@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta content="text/html"/>
+    <meta charset="utf-8"/>
+    <title>美亞報工!</title>
+    <meta http-equiv="Content-Type" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" type="text/css" href="style.css" />
+     </head> 
+  <style>
+      .main {
+        /*水平置中*/      
+        display:flex;
+        /*垂直置中*/
+        justify-content:center;
+        text-align:center;
+  }
+       .list{
+         /*水平置中*/      
+        display:flex;
+        /*垂直置中*/
+        justify-content:center;
+        text-align:center;
+        border-radius: 2px;  
+  }
+ 
+  </style>
+  <body onload="loadBody()">
+    <div class="main">     
+       <h>
+         <img src="https://cdn.glitch.global/d3fc7112-b364-45f9-8eca-982543985e7b/logo21.png?v=1676527840620" width="280px"  height="120px"/><br/>
+         <font size="6" >絞毛頭機作業</font><br/><br/>
+          <table style = "font-size:20px;">
+           <tr>
+            <td>
+                工號:<span  id="show1"></span>
+                姓名:<span id="show2"></span>
+                機台:<span id="show3"></span>
+                班別日期:<span id="show5"></span>
+                班別:<span id="show4"></span>                
+             </td>
+           </tr>  
+        </table>  
+      </h>
+    </div>  
+    
+    <div class="list">          
+      <table>
+        <tbody>
+          <tr>
+            <td><input type="button" onclick="loadA()" value="讀取工令"  style="width:200px;height:60px;font-size:25px;background:#EFEFEF"></td>                                      
+            <td><input type="button" onclick="loadB()" value ="在製品查詢"  style="width:200px;height:60px;font-size:25px;background:#EFEFEF"></td>                                        
+          </tr>
+        </tbody> 
+       </table> 
+    </div>
+   
+      <p>
+         <center>
+            <input type="button" onclick="back()" value ="回前一頁"  style="width:200px;height:60px;font-size:20px; color:red;background:#EFEFEF"><br/><br/>            
+             <script>
+              var txt ="日期:";
+              document.write(txt.big());           
+              date = new Date().toLocaleDateString();
+              document.write(date.big());
+            </script>
+        </center>  
+       </p>        
+   
+    <!JavaScript-->
+   <script>
+       
+        var strUrl = window.location.search;  
+        var getPara,paraVal;
+        var aryPara = [];         
+        
+        function loadBody(){                         
+          if (strUrl != -1)
+            var getSearch = strUrl.split("?");
+            getPara = getSearch[1].split("&");
+              for (i = 0; i < getPara.length; i++){
+                 paraVal = getPara[i].split("=");
+                 aryPara.push(paraVal[0]);                
+                 aryPara[paraVal[0]]=paraVal[1];
+               }              
+                    
+               document.getElementById("show1").innerHTML=aryPara.userId;
+               userName = decodeURIComponent(aryPara.userName);
+               document.getElementById("show2").innerHTML=userName;
+               document.getElementById("show3").innerHTML=aryPara.machineId;
+               document.getElementById("show4").innerHTML=aryPara.groupId;  
+               document.getElementById("show5").innerHTML=aryPara.dateId; 
+         }
+                      
+        function loadA(){                                              
+          requestURL="http://172.16.2.47/webbi/app01/絞毛頭機作業/讀取工令.html";
+          requestURL = requestURL+"?" + "userId=" + aryPara.userId + "&userName=" + userName + "&machineId=" + aryPara.machineId +
+                       "&dateId=" + aryPara.dateId +"&groupId=" + aryPara.groupId;    
+           var newWindow=window.open(requestURL,'_self');}
+          
+        function loadB(){                                        
+          requestURL="http://172.16.2.47/webbi/app01/絞毛頭機作業/在製品查詢.html";
+          requestURL = requestURL+"?" + "userId=" + aryPara.userId + "&userName=" + userName + "&machineId=" + aryPara.machineId +
+                       "&dateId=" + aryPara.dateId +"&groupId=" + aryPara.groupId;    
+           var newWindow=window.open(requestURL,'_self');} 
+     
+        function back(){                                        
+          requestURL="http://172.16.2.47/webbi/app01/主要作業.html";
+          requestURL = requestURL+"?" + "userId=" + aryPara.userId + "&userName=" + userName + "&machineId=" + aryPara.machineId +
+                       "&dateId=" + aryPara.dateId +"&groupId=" + aryPara.groupId;    
+           var newWindow=window.open(requestURL,'_self');} 
+                              
+    </script>  
+     </body>
+  </html>

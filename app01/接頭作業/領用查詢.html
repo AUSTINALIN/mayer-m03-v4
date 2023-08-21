@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>美亞報工!</title> 
+  
+  <!-- Include Bootstrap for styling -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">  
+  <!-- Include the Bootstrap Table CSS
+  for the table -->
+  <link rel="stylesheet" href="https://unpkg.com/bootstrap-table@1.16.0/dist/bootstrap-table.min.css">
+</head>
+  <style>
+            body{
+               background-color:#69F7BE
+            }
+            /* 表格样式 */
+            
+            .table>tbody>tr>td {
+                border: 2px;
+                font-weight: bold;
+                text-align: center;
+            }
+            
+            .bootstrap-table .table thead>tr>th { 
+                border: 2px;
+                font-weight: bold;
+                text-align: center;
+            }
+            
+       /*     .table thead {
+                background: #ebeaea;
+            } */
+        </style>
+
+<body>
+  <div class="container">
+    <h1 class="text text-dark text-center">
+      <img src="https://cdn.glitch.global/d3fc7112-b364-45f9-8eca-982543985e7b/logo21.png?v=1676527840620" width="280px"  height="120px"/>
+    </h1>
+    <h3 class="text text-dark text-center">接頭機作業-吊鉤檢查</h3>
+    <h4 class="text text-dark text-center">
+      <span style="font-size:16px">姓名:</span>
+      <input  type="text" placeholder="姓名" id="usrId" readonly/>
+      <span style="font-size:16px">機台:</span>
+      <input  type="text" placeholder="機台代號" id="mchId"  readonly/>
+      <span style="font-size:16px">班別日期:</span>
+      <input type="text" placeholder="作業日期" id="oprDate" readonly/>
+      <span style="font-size:16px">班別:</span>
+      <input type="text" placeholder="班別班次" id="oprGroup" readonly />
+    </h4>
+    <table class="table table-bordered  table-striped border-dark table-light">    
+       <tr>    
+          <td><font size="5"><b>吊勾檢查作業</b></font></td>
+       </tr>
+       <tr>
+          <td><span style="font-size:16px">大勾銅塊:</span>
+              <input style="width:120px;height:30px;" type="checkbox" id="checkId01" size="02" />
+              <span style="font-size:16px">小勾銅塊:</span>
+              <input style="width:120px;height:30px;" type="checkbox" id="checkId02" size="02" />
+              <span style="font-size:16px">大勾優力膠:</span>
+              <input style="width:120px;height:30px;" type="checkbox" id="checkId03" size="02" />
+              <span style="font-size:16px">小勾優力膠:</span>
+              <input style="width:120px;height:30px;" type="checkbox" id="checkId04" size="02" /><br/>
+              <input style="width:120px;height:30px;font-size:16px;color:red" type="button"  value ="回前一頁"  onclick="back()" >   
+              <input style="width:120px;height:30px;font-size:16px;color:green" type="button"   id="checkButton" value="確認上傳列印" onclick="checkButton()" /></td>
+        </tr>    
+    </table><br/>   
+      <table id="aaa" class="table table-bordered  table-striped border-dark table-light">
+        <thead>
+          <tr>
+            <th data-field="splUseTime"><span>時間</span></th>
+            <th data-field="splUseOrd"><span>製管工令</span></th>
+            <th data-field="splUseId"><span>狹鋼帶捲號序號</span></th>
+            <th data-field="splUseSpec"><span>狹鋼帶規格</span></th>
+            <th data-field="splUseSize"><span>狹鋼帶尺寸</span></th>
+            <th data-field="splUseWgt"><span>重量</span></th>
+            <th data-field="splUseNo"><span>單號</span></th>
+          </tr>
+        </thead>
+      </table><br/>   
+  </div>
+  
+  <!--JavaScript-->
+  <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+  
+  <!-- Include the JavaScript file for Bootstrap table -->
+  <script src="https://unpkg.com/bootstrap-table@1.16.0/dist/bootstrap-table.min.js"></script>
+
+  <script content-type="text/javascript"> 
+    var strUrl = window.location.search;  
+    var getPara,paraVal;
+    var aryPara = []; 
+    var aryDate = [];
+    var request;
+    var requestChk;
+    var jsonObj;
+    var newMyData;
+    var loadFinish=" ";
+    var check01 = "_";
+    var check02 = "_";
+    var check03 = "_";
+    var check04 = "_";
+    var url = "http://172.16.1.222:10010/web/services/WEB10R/";
+    var checkurl = "http://172.16.1.222:10010/web/services/WEB10R/";    
+        
+        function loadBody(){                         
+          if (strUrl != -1)
+            var getSearch = strUrl.split("?");
+            getPara = getSearch[1].split("&");
+              for (i = 0; i < getPara.length; i++){
+                 paraVal = getPara[i].split("=");
+                 aryPara.push(paraVal[0]);                
+                 aryPara[paraVal[0]]=paraVal[1];
+               }  
+                            
+               userName = decodeURIComponent(aryPara.userName);
+               document.getElementById("usrId").outerHTML=userName;
+               document.getElementById("mchId").outerHTML=aryPara.machineId;
+               document.getElementById("oprGroup").outerHTML=aryPara.groupId;  
+               document.getElementById("oprDate").outerHTML=aryPara.dateId;
+               
+               var dateStr = aryPara.dateId.replace(/\-/g,"");
+               url = url + aryPara.userId + aryPara.machineId + dateStr + aryPara.groupId;
+               checkurl = url + aryPara.userId + aryPara.machineId + dateStr + aryPara.groupId;
+         }  
+
+        function checkButton(){ 
+             if (loadFinish!=" "){
+                requestChk = new XMLHttpRequest();             
+                check01 = "_";
+                check02 = "_";
+                check03 = "_";
+                check04 = "_";
+                if (document.getElementById("checkId01").checked) { check01 = "Y"; }
+                if (document.getElementById("checkId02").checked) { check02 = "Y"; }
+                if (document.getElementById("checkId03").checked) { check03 = "Y"; }
+                if (document.getElementById("checkId04").checked) { check04 = "Y"; }
+                checkurl = url + check01 + check02 + check03 + check04 + "_";
+                requestChk.onreadystatechange = function() {
+                  if (requestChk.readyState == 4 && requestChk.status == 200) {
+                     jsonChkObj = JSON.parse(requestChk.responseText);   
+                     var newMyRes = jsonChkObj.splIdMkDta.splIdMkRes ;
+                     alert( newMyRes );
+                     location.reload();                     
+                  }
+             }  
+          requestChk.open("GET", checkurl , true);
+          requestChk.send();
+          }
+        }
+
+    function myLoad(){
+        if(window.XMLHttpRequest){    
+            request=new XMLHttpRequest();                 
+            }
+          request.onreadystatechange = function() {
+            if (request.readyState == 4 && request.status == 200) {
+               jsonObj = JSON.parse(request.responseText);   
+               newMyData = JSON.stringify(jsonObj.splUseRecs );
+               newMyData = jsonObj.splUseRecs;
+               loadFinish = "Y";
+               $('#aaa').bootstrapTable({ data: newMyData ,
+                 height : 650,
+                 pageSize : 50 })//一頁顯示幾筆
+            }
+        }  
+          request.open("GET", url ,'_self', true);
+          request.send();
+      }
+
+    $(document).ready(function () {        
+        loadBody();        
+        var myLod  =  myLoad();
+     });
+  
+     function back(){                                        
+             requestURL="http://172.16.2.47/webbi/app01/接頭作業/接頭機作業.html";
+             requestURL = requestURL+"?" + "userId=" + aryPara.userId + "&userName=" + userName + "&machineId=" + aryPara.machineId +
+                       "&dateId=" + aryPara.dateId +"&groupId=" + aryPara.groupId;    
+             var newWindow=window.open(requestURL,'_self');}              
+                             
+    // Specify the JSON data to be displayed
+  </script>
+</body>
+</html>

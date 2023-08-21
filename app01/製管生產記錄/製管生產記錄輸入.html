@@ -1,0 +1,1346 @@
+<!DOCTYPE html>
+ <html>
+ <head>
+ <meta name="viewport" content="width=device-width, initial-scale=1">
+   <link type="text/css" href="http://172.16.1.2:10010/apppm6.css" rel="stylesheet">
+   <script type="text/javascript" src="http://172.16.1.2:10010/app.js"></script>    
+   <script src="jquery-3.4.1.js"></script>
+  <meta charset="utf-8">
+
+<style>
+body {font-family: Arial;  }
+
+h1{
+  text-indent:20%;
+}
+    
+table, th, td {
+  border: 1px solid black;
+  border-collapse: collapse;
+  border-radius :2px
+}
+  th, td {
+  padding: 1px 10px 5px 10px;
+}
+
+/* Style the tab */
+.tab {
+  overflow: hidden;
+  border: 1px solid #ccc;
+  background-color: #f1f1f1;
+}
+
+/* Style the buttons inside the tab */
+.tab button {
+  background-color: inherit;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  padding: 6px 12px;
+  transition: 0.3s;
+  font-size: 23px;
+}
+
+/* Change background color of buttons on hover */
+.tab button:hover {
+  background-color: #ddd;
+}
+
+/* Create an active/current tablink class */
+.tab button.active {
+  background-color: #ccc;
+}
+/* Style the tab content */
+.tabcontent {
+  display: none;
+  padding: 6px 12px;
+  border: 1px solid #ccc;
+  border-top:none;
+}
+
+/* Style the tab content */
+.class_div {
+  display: none;
+  padding: 6px 12px;
+}
+</style>
+</head>
+
+<body>
+<h1 id="heading"><u>製管生產記錄－停車</u></h1>
+<label>機台</label><input type="text" id="mchPmm61a" readonly style="width:80px;height:30px;font-size:18px" >
+<!-- select name="machine" id="mchPmm61a" readonly style="width:80px;height:30px;font-size:18px" >
+    <option value="M01">一號機</option>
+    <option value="M02">二號機</option>
+    <option value="M03" selected >三號機</option>
+    <option value="M05">五號機</option>
+    <option value="M09">九號機</option>
+    <option value="M10">十號機</option>
+</select -->
+<label>日期</label><input type="date" id="datePmm61a" readonly style="width:150px;height:30px;font-size:18px">
+<label>班別</label><input type="text" id="grpPmm61a" readonly style="width:150px;height:30px;font-size:18px" >
+<!-- select name="group" id="grpPmm61a" readonly style="width:80px;height:30px;font-size:18px">
+    <option value="A1" selected >A1 8小時(07:00--15:30)</option>
+    <option value="A2"          >A2 8小時(15:30--24:00)</option>
+    <option value="A3"          >A3 8小時(24:00--07:00)</option>
+    <option value="B1"          >B1 12小時(07:00--19:00)</option>
+    <option value="B2"          >B2 12小時(19:00--07:00)</option>
+</select -->
+<label>班長</label><input type="text"  id="useridPmm61a"  style="width:100px;height:30px;font-size:18px">
+<label>課長</label><input type="text"  id="userid01Pmm61a" style="width:100px;height:30px;font-size:18px" ><br/>
+<input type="button" value="取得資料"         onclick="chainPmm61()" style="width:100px;height:60px;font-size:18px" />
+<input type="button" value="製管生產記錄存檔"  onclick="pmm61Upload()" style="width:180px;height:60px;font-size:18px" />
+<input type="button" onclick="back()" value ="回前一頁"  style="color:red;width:100px;height:60px;font-size:18px">
+
+<div class="tab" style="width:1550px;height:70px">
+  <button class="tablinks" onclick="openCity(event, 'id_div_1')" style="border: 2px solid black;color:blue">製管停車記錄</button>
+  <button class="tablinks" onclick="openCity(event, 'id_div_2')" style="border: 2px solid black;color:green">鋼管產出記錄</button>
+  <button class="tablinks" onclick="openCity(event, 'id_div_3')" style="border: 2px solid black;color:black">鋼帶領用記錄</button>
+  <button class="tablinks" onclick="openCity(event, 'id_div_4')" style="border: 2px solid black;color:red">羅拉間隙記錄</button>
+</div>
+
+<div id="id_div_1" class="class_div">
+<form id="id_form_1" class="class_form_1">
+<!-- <h3><u>製管停車記錄</u></h3>  -->
+<table id="table01">
+  <tr>
+    <th>No.</th>
+    <th>停車起(時)</th>    
+    <th>停車起(分)</th>    
+    <th>停車止(時)</th>    
+    <th>停車止(分)</th>
+    <th>類別</th>
+    <th>原因</th>
+  </tr>  
+  <tr>
+     <td><input type="text" id="fm1FLDA01" value="01"  readonly style="width:50px;height:30px;font-size:18px;background-color: #E0E0E0"/></td>
+    <td><select class="contact-form__input contact-form__input--fm1FLDB01" id="fm1FLDB01" name="fm1FLDB01"  style="width: 70px;height:50px;font-size:18px"></select></td>
+    <td><select class="contact-form__input contact-form__input--fm1FLDC01" id="fm1FLDC01" name="fm1FLDC01"  style="width: 70px;height:50px;font-size:18px"></select></td>
+    <td><select class="contact-form__input contact-form__input--fm1FLDD01" id="fm1FLDD01" name="fm1FLDD01"  style="width: 70px;height:50px;font-size:18px"></select></td>
+    <td><select class="contact-form__input contact-form__input--fm1FLDE01" id="fm1FLDE01" name="fm1FLDE01"  style="width: 70px;height:50px;font-size:18px"></select></td>
+    <td><select class="contact-form__input contact-form__input--fm1FLDF01" id="fm1FLDF01" name="fm1FLDF01"  style="width:150px;height:50px;font-size:18px"></select></td>
+    <td><select class="contact-form__input contact-form__input--fm1FLDG01" id="fm1FLDG01" name="fm1FLDG01"  style="width:350px;height:50px;font-size:18px"></select></td>
+  </tr>
+  <tr>
+     <td><input type="text" id="fm1FLDA02" value="02"  readonly style="width:50px;height:30px;font-size:18px;background-color: #E0E0E0"/></td>
+    <td><select class="contact-form__input contact-form__input--fm1FLDB02" id="fm1FLDB02" name="fm1FLDB02"  style="width: 70px;height:50px;font-size:18px"></select></td>
+    <td><select class="contact-form__input contact-form__input--fm1FLDC02" id="fm1FLDC02" name="fm1FLDC02"  style="width: 70px;height:50px;font-size:18px"></select></td>
+    <td><select class="contact-form__input contact-form__input--fm1FLDD02" id="fm1FLDD02" name="fm1FLDD02"  style="width: 70px;height:50px;font-size:18px"></select></td>
+    <td><select class="contact-form__input contact-form__input--fm1FLDE02" id="fm1FLDE02" name="fm1FLDE02"  style="width: 70px;height:50px;font-size:18px"></select></td>
+    <td><select class="contact-form__input contact-form__input--fm1FLDF02" id="fm1FLDF02" name="fm1FLDF02"  style="width:150px;height:50px;font-size:18px"></select></td>
+    <td><select class="contact-form__input contact-form__input--fm1FLDG02" id="fm1FLDG02" name="fm1FLDG02"  style="width:350px;height:50px;font-size:18px"></select></td>
+  </tr>
+  <tr>
+     <td><input type="text" id="fm1FLDA03" value="03"  readonly style="width:50px;height:30px;font-size:18px;background-color: #E0E0E0"/></td>
+    <td><select class="contact-form__input contact-form__input--fm1FLDB03" id="fm1FLDB03" name="fm1FLDB03"  style="width: 70px;height:50px;font-size:18px"></select></td>
+    <td><select class="contact-form__input contact-form__input--fm1FLDC03" id="fm1FLDC03" name="fm1FLDC03"  style="width: 70px;height:50px;font-size:18px"></select></td>
+    <td><select class="contact-form__input contact-form__input--fm1FLDD03" id="fm1FLDD03" name="fm1FLDD03"  style="width: 70px;height:50px;font-size:18px"></select></td>
+    <td><select class="contact-form__input contact-form__input--fm1FLDE03" id="fm1FLDE03" name="fm1FLDE03"  style="width: 70px;height:50px;font-size:18px"></select></td>
+    <td><select class="contact-form__input contact-form__input--fm1FLDF03" id="fm1FLDF03" name="fm1FLDF03"  style="width:150px;height:50px;font-size:18px"></select></td>
+    <td><select class="contact-form__input contact-form__input--fm1FLDG03" id="fm1FLDG03" name="fm1FLDG03"  style="width:350px;height:50px;font-size:18px"></select></td>
+  </tr>
+  <tr>
+     <td><input type="text" id="fm1FLDA04" value="04"  readonly style="width:50px;height:30px;font-size:18px;background-color: #E0E0E0"/></td>
+    <td><select class="contact-form__input contact-form__input--fm1FLDB04" id="fm1FLDB04" name="fm1FLDB04"  style="width: 70px;height:50px;font-size:18px"></select></td>
+    <td><select class="contact-form__input contact-form__input--fm1FLDC04" id="fm1FLDC04" name="fm1FLDC04"  style="width: 70px;height:50px;font-size:18px"></select></td>
+    <td><select class="contact-form__input contact-form__input--fm1FLDD04" id="fm1FLDD04" name="fm1FLDD04"  style="width: 70px;height:50px;font-size:18px"></select></td>
+    <td><select class="contact-form__input contact-form__input--fm1FLDE04" id="fm1FLDE04" name="fm1FLDE04"  style="width: 70px;height:50px;font-size:18px"></select></td>
+    <td><select class="contact-form__input contact-form__input--fm1FLDF04" id="fm1FLDF04" name="fm1FLDF04"  style="width:150px;height:50px;font-size:18px"></select></td>
+    <td><select class="contact-form__input contact-form__input--fm1FLDG04" id="fm1FLDG04" name="fm1FLDG04"  style="width:350px;height:50px;font-size:18px"></select></td>
+  </tr>
+  <tr>
+     <td><input type="text" id="fm1FLDA05" value="05"  readonly style="width:50px;height:30px;font-size:18px;background-color: #E0E0E0"/></td>
+    <td><select class="contact-form__input contact-form__input--fm1FLDB05" id="fm1FLDB05" name="fm1FLDB05"  style="width: 70px;height:50px;font-size:18px"></select></td>
+    <td><select class="contact-form__input contact-form__input--fm1FLDC05" id="fm1FLDC05" name="fm1FLDC05"  style="width: 70px;height:50px;font-size:18px"></select></td>
+    <td><select class="contact-form__input contact-form__input--fm1FLDD05" id="fm1FLDD05" name="fm1FLDD05"  style="width: 70px;height:50px;font-size:18px"></select></td>
+    <td><select class="contact-form__input contact-form__input--fm1FLDE05" id="fm1FLDE05" name="fm1FLDE05"  style="width: 70px;height:50px;font-size:18px"></select></td>
+    <td><select class="contact-form__input contact-form__input--fm1FLDF05" id="fm1FLDF05" name="fm1FLDF05"  style="width:150px;height:50px;font-size:18px"></select></td>
+    <td><select class="contact-form__input contact-form__input--fm1FLDG05" id="fm1FLDG05" name="fm1FLDG05"  style="width:350px;height:50px;font-size:18px"></select></td>
+  </tr>
+  <tr>
+     <td><input type="text" id="fm1FLDA06" value="06"  readonly style="width:50px;height:30px;font-size:18px;background-color: #E0E0E0"/></td>
+    <td><select class="contact-form__input contact-form__input--fm1FLDB06" id="fm1FLDB06" name="fm1FLDB06"  style="width: 70px;height:50px;font-size:18px"></select></td>
+    <td><select class="contact-form__input contact-form__input--fm1FLDC06" id="fm1FLDC06" name="fm1FLDC06"  style="width: 70px;height:50px;font-size:18px"></select></td>
+    <td><select class="contact-form__input contact-form__input--fm1FLDD06" id="fm1FLDD06" name="fm1FLDD06"  style="width: 70px;height:50px;font-size:18px"></select></td>
+    <td><select class="contact-form__input contact-form__input--fm1FLDE06" id="fm1FLDE06" name="fm1FLDE06"  style="width: 70px;height:50px;font-size:18px"></select></td>
+    <td><select class="contact-form__input contact-form__input--fm1FLDF06" id="fm1FLDF06" name="fm1FLDF06"  style="width:150px;height:50px;font-size:18px"></select></td>
+    <td><select class="contact-form__input contact-form__input--fm1FLDG06" id="fm1FLDG06" name="fm1FLDG06"  style="width:350px;height:50px;font-size:18px"></select></td>
+  </tr>
+  <tr>
+     <td><input type="text" id="fm1FLDA07" value="07"  readonly style="width:50px;height:30px;font-size:18px;background-color: #E0E0E0"/></td>
+    <td><select class="contact-form__input contact-form__input--fm1FLDB07" id="fm1FLDB07" name="fm1FLDB07"  style="width: 70px;height:50px;font-size:18px"></select></td>
+    <td><select class="contact-form__input contact-form__input--fm1FLDC07" id="fm1FLDC07" name="fm1FLDC07"  style="width: 70px;height:50px;font-size:18px"></select></td>
+    <td><select class="contact-form__input contact-form__input--fm1FLDD07" id="fm1FLDD07" name="fm1FLDD07"  style="width: 70px;height:50px;font-size:18px"></select></td>
+    <td><select class="contact-form__input contact-form__input--fm1FLDE07" id="fm1FLDE07" name="fm1FLDE07"  style="width: 70px;height:50px;font-size:18px"></select></td>
+    <td><select class="contact-form__input contact-form__input--fm1FLDF07" id="fm1FLDF07" name="fm1FLDF07"  style="width:150px;height:50px;font-size:18px"></select></td>
+    <td><select class="contact-form__input contact-form__input--fm1FLDG07" id="fm1FLDG07" name="fm1FLDG07"  style="width:350px;height:50px;font-size:18px"></select></td>
+  </tr>
+  <tr>
+     <td><input type="text" id="fm1FLDA08" value="08"  readonly style="width:50px;height:30px;font-size:18px;background-color: #E0E0E0"/></td>
+    <td><select class="contact-form__input contact-form__input--fm1FLDB08" id="fm1FLDB08" name="fm1FLDB08"  style="width: 70px;height:50px;font-size:18px"></select></td>
+    <td><select class="contact-form__input contact-form__input--fm1FLDC08" id="fm1FLDC08" name="fm1FLDC08"  style="width: 70px;height:50px;font-size:18px"></select></td>
+    <td><select class="contact-form__input contact-form__input--fm1FLDD08" id="fm1FLDD08" name="fm1FLDD08"  style="width: 70px;height:50px;font-size:18px"></select></td>
+    <td><select class="contact-form__input contact-form__input--fm1FLDE08" id="fm1FLDE08" name="fm1FLDE08"  style="width: 70px;height:50px;font-size:18px"></select></td>
+    <td><select class="contact-form__input contact-form__input--fm1FLDF08" id="fm1FLDF08" name="fm1FLDF08"  style="width:150px;height:50px;font-size:18px"></select></td>
+    <td><select class="contact-form__input contact-form__input--fm1FLDG08" id="fm1FLDG08" name="fm1FLDG08"  style="width:350px;height:50px;font-size:18px"></select></td>
+  </tr>
+  <tr>
+     <td><input type="text" id="fm1FLDA09" value="09"  readonly style="width:50px;height:30px;font-size:18px;background-color: #E0E0E0"/></td>
+    <td><select class="contact-form__input contact-form__input--fm1FLDB09" id="fm1FLDB09" name="fm1FLDB09"  style="width: 70px;height:50px;font-size:18px"></select></td>
+    <td><select class="contact-form__input contact-form__input--fm1FLDC09" id="fm1FLDC09" name="fm1FLDC09"  style="width: 70px;height:50px;font-size:18px"></select></td>
+    <td><select class="contact-form__input contact-form__input--fm1FLDD09" id="fm1FLDD09" name="fm1FLDD09"  style="width: 70px;height:50px;font-size:18px"></select></td>
+    <td><select class="contact-form__input contact-form__input--fm1FLDE09" id="fm1FLDE09" name="fm1FLDE09"  style="width: 70px;height:50px;font-size:18px"></select></td>
+    <td><select class="contact-form__input contact-form__input--fm1FLDF09" id="fm1FLDF09" name="fm1FLDF09"  style="width:150px;height:50px;font-size:18px"></select></td>
+    <td><select class="contact-form__input contact-form__input--fm1FLDG09" id="fm1FLDG09" name="fm1FLDG09"  style="width:350px;height:50px;font-size:18px"></select></td>
+  </tr>
+</table>
+</form>
+</div>
+
+<div id="id_div_2" class="class_div">
+<form id="id_form_2" class="class_form_2">
+<!-- <h3><u>鋼管產出記錄</u></h3>  -->
+<table id="table02">
+  <tr>
+    <th rowspan="2">項次</th>
+    <th rowspan="2">工令</th>  
+    <th rowspan="2">規格</th>
+    <th>合格數量</th>
+    <th>T2數量</th>
+    <th>加長管數量</th>
+    <th>時間起</th>
+    <th>時間迄</th>
+    <th rowspan="2">產品</th>
+  </tr>
+  <tr>     
+    <th>   焊速  </th>
+    <th>  高週波 </th>
+    <th>蘿拉間隙1</th>
+    <th>蘿拉間隙2</th>
+    <th>蘿拉間隙3</th>
+  </tr>
+
+  <tr>
+     <td rowspan="2"><input type="number"  min="01"  max="09"    id="fm2FLDA01" value="01" readonly style="width:50px;height:60px;font-size:18px;background-color: #E0E0E0"/></td>
+     <td rowspan="2"><input type="text"                        id="fm2FLDB01" style="width:150px;height:60px;font-size:18px"/></td>  
+     <td rowspan="2"><input type="text"                        id="fm2FLDD01" style="width:350px;height:60px;font-size:18px"/></td>
+     <td><input type="number"  min="0000"  max="9999"  id="fm2FLDE01" style="width:100px;height:35px;font-size:18px"/></td>
+     <td><input type="number"  min="0000"  max="9999"  id="fm2FLDF01" style="width:100px;height:35px;font-size:18px"/></td>
+     <td><input type="number"  min="0000"  max="9999"  id="fm2FLDN01" style="width:100px;height:35px;font-size:18px"/></td>
+     <td><input type="number"  min="0000"  max="2359"  id="fm2FLDL01" style="width:100px;height:35px;font-size:18px"/></td>
+     <td><input type="number"  min="0000"  max="2359"  id="fm2FLDM01" style="width:100px;height:35px;font-size:18px"/></td>
+     <td rowspan="2"><input type="text"                        id="fm2FLDC01" style="width:300px;height:60px;font-size:18px"/></td>
+  </tr>
+  <tr>    
+     <td><input type="number"  min="000.0" max="999.9" id="fm2FLDJ01" style="width:100px;height:35px;font-size:18px"/></td>
+     <td><input type="number"  min="000"   max="999"   id="fm2FLDK01" style="width:100px;height:35px;font-size:18px"/></td>
+     <td><input type="number"  min="000.0" max="999.9" id="fm2FLDG01" style="width:100px;height:35px;font-size:18px"/></td>
+     <td><input type="number"  min="000.0" max="999.9" id="fm2FLDH01" style="width:100px;height:35px;font-size:18px;vertical-align:center;"/></td>
+     <td><input type="number"  min="000.0" max="999.9" id="fm2FLDI01" style="width:100px;height:35px;font-size:18px"/></td>
+  </tr>
+
+  <tr>
+     <td rowspan="2"><input type="number"  min="01"  max="09"    id="fm2FLDA02" value="02" readonly style="width:50px;height:60px;font-size:18px;background-color: #E0E0E0"/></td>
+     <td rowspan="2"><input type="text"                        id="fm2FLDB02" style="width:150px;height:60px;font-size:18px"></td>   
+     <td rowspan="2"><input type="text"                        id="fm2FLDD02" style="width:350px;height:60px;font-size:18px"></td>
+     <td><input type="number"  min="0000"  max="9999"  id="fm2FLDE02" style="width:100px;height:35px;font-size:18px"/></td>
+     <td><input type="number"  min="0000"  max="9999"  id="fm2FLDF02" style="width:100px;height:35px;font-size:18px"/></td>
+     <td><input type="number"  min="0000"  max="9999"  id="fm2FLDN02" style="width:100px;height:35px;font-size:18px"/></td>
+     <td><input type="number"  min="0000"  max="2359"  id="fm2FLDL02" style="width:100px;height:35px;font-size:18px"/></td>
+     <td><input type="number"  min="0000"  max="2359"  id="fm2FLDM02" style="width:100px;height:35px;font-size:18px"/></td>
+     <td rowspan="2"><input type="text"                        id="fm2FLDC02" style="width:300px;height:60px;font-size:18px"></td>
+  </tr>
+  <tr>     
+     <td><input type="number"  min="000.0" max="999.9" id="fm2FLDJ02" style="width:100px;height:35px;font-size:18px"/></td>
+     <td><input type="number"  min="000"   max="999"   id="fm2FLDK02" style="width:100px;height:35px;font-size:18px"/></td>
+     <td><input type="number"  min="000.0" max="999.9" id="fm2FLDG02" style="width:100px;height:35px;font-size:18px"/></td>
+     <td><input type="number"  min="000.0" max="999.9" id="fm2FLDH02" style="width:100px;height:35px;font-size:18px"/></td>
+     <td><input type="number"  min="000.0" max="999.9" id="fm2FLDI02" style="width:100px;height:35px;font-size:18px"/></td>
+
+  </tr>
+
+  <tr>
+     <td rowspan="2"><input type="number"  min="01"  max="09"    id="fm2FLDA03" value="03" readonly style="width:50px;height:60px;font-size:18px;background-color: #E0E0E0"/></td>
+     <td rowspan="2"><input type="text"                        id="fm2FLDB03"  style="width:150px;height:60px;font-size:18px" ></td>    
+     <td rowspan="2"><input type="text"                        id="fm2FLDD03"  style="width:350px;height:60px;font-size:18px"></td>
+     <td><input type="number"  min="0000"  max="9999"  id="fm2FLDE03" style="width:100px;height:35px;font-size:18px"/></td>
+     <td><input type="number"  min="0000"  max="9999"  id="fm2FLDF03" style="width:100px;height:35px;font-size:18px"/></td>
+     <td><input type="number"  min="0000"  max="9999"  id="fm2FLDN03" style="width:100px;height:35px;font-size:18px"/></td>
+     <td><input type="number"  min="0000"  max="2359"  id="fm2FLDL03" style="width:100px;height:35px;font-size:18px"/></td>
+     <td><input type="number"  min="0000"  max="2359"  id="fm2FLDM03" style="width:100px;height:35px;font-size:18px"/></td>
+     <td rowspan="2"><input type="text"                        id="fm2FLDC03" style="width:300px;height:60px;font-size:18px"></td>
+  </tr>
+  <tr>     
+     <td><input type="number"  min="000.0" max="999.9" id="fm2FLDJ03" style="width:100px;height:35px;font-size:18px"/></td>
+     <td><input type="number"  min="000"   max="999"   id="fm2FLDK03" style="width:100px;height:35px;font-size:18px"/></td>
+     <td><input type="number"  min="000.0" max="999.9" id="fm2FLDG03" style="width:100px;height:35px;font-size:18px"/></td>
+     <td><input type="number"  min="000.0" max="999.9" id="fm2FLDH03" style="width:100px;height:35px;font-size:18px"/></td>
+     <td><input type="number"  min="000.0" max="999.9" id="fm2FLDI03" style="width:100px;height:35px;font-size:18px"/></td>
+
+  </tr>
+
+  <tr>
+     <td rowspan="2"><input type="number"  min="01"  max="09"    id="fm2FLDA04" value="04" readonly style="width:50px;height:60px;font-size:18px;background-color: #E0E0E0"/></td>
+     <td rowspan="2"><input type="text"                        id="fm2FLDB04"  style="width:150px;height:60px;font-size:18px"></td> 
+     <td rowspan="2"><input type="text"                        id="fm2FLDD04"  style="width:350px;height:60px;font-size:18px"></td>
+     <td><input type="number"  min="0000"  max="9999"  id="fm2FLDE04" style="width:100px;height:35px;font-size:18px"/></td>
+     <td><input type="number"  min="0000"  max="9999"  id="fm2FLDF04" style="width:100px;height:35px;font-size:18px"/></td>
+     <td><input type="number"  min="0000"  max="9999"  id="fm2FLDN04" style="width:100px;height:35px;font-size:18px"/></td>
+     <td><input type="number"  min="0000"  max="2359"  id="fm2FLDL04" style="width:100px;height:35px;font-size:18px"/></td>
+     <td><input type="number"  min="0000"  max="2359"  id="fm2FLDM04" style="width:100px;height:35px;font-size:18px"/></td>
+     <td rowspan="2"><input type="text"                        id="fm2FLDC04" style="width:300px;height:60px;font-size:18px"></td>
+  </tr>
+  <tr>     
+     <td><input type="number"  min="000.0" max="999.9" id="fm2FLDJ04" style="width:100px;height:35px;font-size:18px"/></td>
+     <td><input type="number"  min="000"   max="999"   id="fm2FLDK04" style="width:100px;height:35px;font-size:18px"/></td>
+     <td><input type="number"  min="000.0" max="999.9" id="fm2FLDG04" style="width:100px;height:35px;font-size:18px"/></td>
+     <td><input type="number"  min="000.0" max="999.9" id="fm2FLDH04" style="width:100px;height:35px;font-size:18px"/></td>
+     <td><input type="number"  min="000.0" max="999.9" id="fm2FLDI04" style="width:100px;height:35px;font-size:18px"/></td>
+
+  </tr>
+
+  <tr>
+     <td rowspan="2"><input type="number"  min="01"  max="09"    id="fm2FLDA05" value="05" readonly style="width:50px;height:60px;font-size:18px;background-color: #E0E0E0"/></td>
+     <td rowspan="2"><input type="text"                        id="fm2FLDB05"  style="width:150px;height:60px;font-size:18px"></td>    
+     <td rowspan="2"><input type="text"                        id="fm2FLDD05"  style="width:350px;height:60px;font-size:18px"></td>
+     <td><input type="number"  min="0000"  max="9999"  id="fm2FLDE05" style="width:100px;height:35px;font-size:18px"/></td>
+     <td><input type="number"  min="0000"  max="9999"  id="fm2FLDF05" style="width:100px;height:35px;font-size:18px"/></td>
+     <td><input type="number"  min="0000"  max="9999"  id="fm2FLDN05" style="width:100px;height:35px;font-size:18px"/></td>
+     <td><input type="number"  min="0000"  max="2359"  id="fm2FLDL05" style="width:100px;height:35px;font-size:18px"/></td>
+     <td><input type="number"  min="0000"  max="2359"  id="fm2FLDM05" style="width:100px;height:35px;font-size:18px"/></td>
+     <td rowspan="2"><input type="text"                        id="fm2FLDC05" style="width:300px;height:60px;font-size:18px"></td>
+  </tr>
+  <tr>     
+     <td><input type="number"  min="000.0" max="999.9" id="fm2FLDJ05" style="width:100px;height:35px;font-size:18px"/></td>
+     <td><input type="number"  min="000"   max="999"   id="fm2FLDK05" style="width:100px;height:35px;font-size:18px"/></td>
+     <td><input type="number"  min="000.0" max="999.9" id="fm2FLDG05" style="width:100px;height:35px;font-size:18px"/></td>
+     <td><input type="number"  min="000.0" max="999.9" id="fm2FLDH05" style="width:100px;height:35px;font-size:18px"/></td>
+     <td><input type="number"  min="000.0" max="999.9" id="fm2FLDI05" style="width:100px;height:35px;font-size:18px"/></td>
+
+  </tr>
+
+  <tr>
+     <td rowspan="2"><input type="number"  min="01"  max="09"    id="fm2FLDA06" value="06" readonly style="width:50px;height:60px;font-size:18px;background-color: #E0E0E0"/></td>
+     <td rowspan="2"><input type="text"                        id="fm2FLDB06"  style="width:150px;height:60px;font-size:18px"></td>   
+     <td rowspan="2"><input type="text"                        id="fm2FLDD06"  style="width:350px;height:60px;font-size:18px" ></td>
+     <td><input type="number"  min="0000"  max="9999"  id="fm2FLDE06" style="width:100px;height:35px;font-size:18px"/></td>
+     <td><input type="number"  min="0000"  max="9999"  id="fm2FLDF06" style="width:100px;height:35px;font-size:18px"/></td>
+     <td><input type="number"  min="0000"  max="9999"  id="fm2FLDN06" style="width:100px;height:35px;font-size:18px"/></td>
+     <td><input type="number"  min="0000"  max="2359"  id="fm2FLDL06" style="width:100px;height:35px;font-size:18px"/></td>
+     <td><input type="number"  min="0000"  max="2359"  id="fm2FLDM06" style="width:100px;height:35px;font-size:18px"/></td>
+     <td rowspan="2"><input type="text"                        id="fm2FLDC06" style="width:300px;height:60px;font-size:18px"></td>
+  </tr>
+  <tr>     
+     <td><input type="number"  min="000.0" max="999.9" id="fm2FLDJ06" style="width:100px;height:35px;font-size:18px"/></td>
+     <td><input type="number"  min="000"   max="999"   id="fm2FLDK06" style="width:100px;height:35px;font-size:18px"/></td>
+     <td><input type="number"  min="000.0" max="999.9" id="fm2FLDG06" style="width:100px;height:35px;font-size:18px"/></td>
+     <td><input type="number"  min="000.0" max="999.9" id="fm2FLDH06" style="width:100px;height:35px;font-size:18px"/></td>
+     <td><input type="number"  min="000.0" max="999.9" id="fm2FLDI06" style="width:100px;height:35px;font-size:18px"/></td>
+
+  </tr>
+
+  <tr>
+     <td rowspan="2"><input type="number"  min="01"  max="09"    id="fm2FLDA07" value="07" readonly style="width:50px;height:60px;font-size:18px;background-color: #E0E0E0"/></td>
+     <td rowspan="2"><input type="text"                        id="fm2FLDB07"  style="width:150px;height:60px;font-size:18px"></td>    
+     <td rowspan="2"><input type="text"                        id="fm2FLDD07"  style="width:350px;height:60px;font-size:18px"></td>
+     <td><input type="number"  min="0000"  max="9999"  id="fm2FLDE07" style="width:100px;height:35px;font-size:18px"/></td>
+     <td><input type="number"  min="0000"  max="9999"  id="fm2FLDF07" style="width:100px;height:35px;font-size:18px"/></td>
+     <td><input type="number"  min="0000"  max="9999"  id="fm2FLDN07" style="width:100px;height:35px;font-size:18px"/></td>
+     <td><input type="number"  min="0000"  max="2359"  id="fm2FLDL07" style="width:100px;height:35px;font-size:18px"/></td>
+     <td><input type="number"  min="0000"  max="2359"  id="fm2FLDM07" style="width:100px;height:35px;font-size:18px"/></td>
+     <td rowspan="2"><input type="text"                        id="fm2FLDC07" style="width:300px;height:60px;font-size:18px"></td>
+  </tr>
+  <tr>     
+     <td><input type="number"  min="000.0" max="999.9" id="fm2FLDJ07" style="width:100px;height:35px;font-size:18px"/></td>
+     <td><input type="number"  min="000"   max="999"   id="fm2FLDK07" style="width:100px;height:35px;font-size:18px"/></td>
+     <td><input type="number"  min="000.0" max="999.9" id="fm2FLDG07" style="width:100px;height:35px;font-size:18px"/></td>
+     <td><input type="number"  min="000.0" max="999.9" id="fm2FLDH07" style="width:100px;height:35px;font-size:18px"/></td>
+     <td><input type="number"  min="000.0" max="999.9" id="fm2FLDI07" style="width:100px;height:35px;font-size:18px"/></td>
+
+  </tr>
+
+  <tr>
+     <td rowspan="2"><input type="number"  min="01"  max="09"    id="fm2FLDA08" value="08" readonly style="width:50px;height:60px;font-size:18px;background-color: #E0E0E0"/></td>
+     <td rowspan="2"><input type="text"                       id="fm2FLDB08"  style="width:150px;height:60px;font-size:18px"></td>  
+     <td rowspan="2"><input type="text"                       id="fm2FLDD08"  style="width:350px;height:60px;font-size:18px"></td>
+     <td><input type="number"  min="0000"  max="9999"  id="fm2FLDE08" style="width:100px;height:35px;font-size:18px"/></td>
+     <td><input type="number"  min="0000"  max="9999"  id="fm2FLDF08" style="width:100px;height:35px;font-size:18px"/></td>
+     <td><input type="number"  min="0000"  max="9999"  id="fm2FLDN08" style="width:100px;height:35px;font-size:18px"/></td>
+     <td><input type="number"  min="0000"  max="2359"  id="fm2FLDL08" style="width:100px;height:35px;font-size:18px"/></td>
+     <td><input type="number"  min="0000"  max="2359"  id="fm2FLDM08" style="width:100px;height:35px;font-size:18px"/></td>
+     <td rowspan="2"><input type="text"                        id="fm2FLDC08" style="width:300px;height:60px;font-size:18px"></td>
+  </tr>
+  <tr>     
+     <td><input type="number"  min="000.0" max="999.9" id="fm2FLDJ08" style="width:100px;height:35px;font-size:18px"/></td>
+     <td><input type="number"  min="000"   max="999"   id="fm2FLDK08" style="width:100px;height:35px;font-size:18px"/></td>
+     <td><input type="number"  min="000.0" max="999.9" id="fm2FLDG08" style="width:100px;height:35px;font-size:18px"/></td>
+     <td><input type="number"  min="000.0" max="999.9" id="fm2FLDH08" style="width:100px;height:35px;font-size:18px"/></td>
+     <td><input type="number"  min="000.0" max="999.9" id="fm2FLDI08" style="width:100px;height:35px;font-size:18px"/></td>
+
+  </tr>
+  <tr>
+     <td rowspan="2"><input type="number"  min="01"  max="09"    id="fm2FLDA09" value="09" readonly style="width:50px;height:60px;font-size:18px;background-color: #E0E0E0"/></td>
+     <td rowspan="2"><input type="text"                       id="fm2FLDB09"  style="width:150px;height:60px;font-size:18px"></td>  
+     <td rowspan="2"><input type="text"                       id="fm2FLDD09"  style="width:350px;height:60px;font-size:18px"></td>
+     <td><input type="number"  min="0000"  max="9999"  id="fm2FLDE09" style="width:100px;height:35px;font-size:18px"/></td>
+     <td><input type="number"  min="0000"  max="9999"  id="fm2FLDF09" style="width:100px;height:35px;font-size:18px"/></td>
+     <td><input type="number"  min="0000"  max="9999"  id="fm2FLDN09" style="width:100px;height:35px;font-size:18px"/></td>
+     <td><input type="number"  min="0000"  max="2359"  id="fm2FLDL09" style="width:100px;height:35px;font-size:18px"/></td>
+     <td><input type="number"  min="0000"  max="2359"  id="fm2FLDM09" style="width:100px;height:35px;font-size:18px"/></td>
+     <td rowspan="2"><input type="text"                        id="fm2FLDC09" style="width:300px;height:60px;font-size:18px"></td>
+  </tr>
+  <tr>     
+     <td><input type="number"  min="000.0" max="999.9" id="fm2FLDJ09" style="width:100px;height:35px;font-size:18px"/></td>
+     <td><input type="number"  min="000"   max="999"   id="fm2FLDK09" style="width:100px;height:35px;font-size:18px"/></td>
+     <td><input type="number"  min="000.0" max="999.9" id="fm2FLDG09" style="width:100px;height:35px;font-size:18px"/></td>
+     <td><input type="number"  min="000.0" max="999.9" id="fm2FLDH09" style="width:100px;height:35px;font-size:18px"/></td>
+     <td><input type="number"  min="000.0" max="999.9" id="fm2FLDI09" style="width:100px;height:35px;font-size:18px"/></td>
+
+  </tr>
+
+  </table>
+</form>
+</div>
+
+<div id="id_div_3" class="class_div">
+<form id="id_form_3" class="class_form_3">
+<!-- <h3><u>鋼帶領用記錄</u></h3>  -->
+<table id="table03" >
+  <tr>
+    <th>項次</th>
+    <th>製管工令</th>
+    <th>鋼帶</th>
+    <th>規格</th>
+    <th>捲數</th>
+    <th>重量</th>
+  </tr>
+
+  <tr>
+     <td><input type="number"  id="fm3FLDA01" value="01" readonly style="width:50px;height:35px;font-size:18px;background-color: #E0E0E0"/></td>
+     <td><input type="text"    id="fm3FLDB01" style="width:150px;height:35px;font-size:18px"/></td>
+     <td><input type="text"    id="fm3FLDC01" style="width:150px;height:35px;font-size:18px"/></td>
+     <td><input type="text"    id="fm3FLDD01" style="width:350px;height:35px;font-size:18px"/></td>
+     <td><input type="number"  id="fm3FLDE01" style="width:100px;height:35px;font-size:18px"/></td>
+     <td><input type="number"  id="fm3FLDF01" style="width:100px;height:35px;font-size:18px"/></td>
+  </tr>
+  
+  <tr>
+     <td><input type="number"  id="fm3FLDA02" value="02" readonly style="width:50px;height:35px;font-size:18px"/></td>
+     <td><input type="text"    id="fm3FLDB02" style="width:150px;height:35px;font-size:18px"/></td>
+     <td><input type="text"    id="fm3FLDC02" style="width:150px;height:35px;font-size:18px"/></td>
+     <td><input type="text"    id="fm3FLDD02" style="width:350px;height:35px;font-size:18px"/></td>
+     <td><input type="number"  id="fm3FLDE02" style="width:100px;height:35px;font-size:18px"/></td>
+     <td><input type="number"  id="fm3FLDF02" style="width:100px;height:35px;font-size:18px"/></td>
+  </tr>
+
+  <tr>
+     <td><input type="number"  id="fm3FLDA03" value="03" readonly style="width:50px;height:35px;font-size:18px"/></td>
+     <td><input type="text"    id="fm3FLDB03" style="width:150px;height:35px;font-size:18px"/></td>
+     <td><input type="text"    id="fm3FLDC03" style="width:150px;height:35px;font-size:18px"/></td>
+     <td><input type="text"    id="fm3FLDD03" style="width:350px;height:35px;font-size:18px"/></td>
+     <td><input type="number"  id="fm3FLDE03" style="width:100px;height:35px;font-size:18px"/></td>
+     <td><input type="number"  id="fm3FLDF03" style="width:100px;height:35px;font-size:18px"/></td>
+  </tr>
+    
+  <tr>
+     <td><input type="number"  id="fm3FLDA04" value="04" readonly style="width:50px;height:35px;font-size:18px"/></td>
+     <td><input type="text"    id="fm3FLDB04" style="width:150px;height:35px;font-size:18px"/></td>
+     <td><input type="text"    id="fm3FLDC04" style="width:150px;height:35px;font-size:18px"/></td>
+     <td><input type="text"    id="fm3FLDD04" style="width:350px;height:35px;font-size:18px"/></td>
+     <td><input type="number"  id="fm3FLDE04" style="width:100px;height:35px;font-size:18px"/></td>
+     <td><input type="number"  id="fm3FLDF04" style="width:100px;height:35px;font-size:18px"/></td>
+  </tr>
+  
+  <tr>
+     <td><input type="number"  id="fm3FLDA05" value="05" readonly style="width:50px;height:35px;font-size:18px"/></td>
+     <td><input type="text"    id="fm3FLDB05" style="width:150px;height:35px;font-size:18px"/></td>
+     <td><input type="text"    id="fm3FLDC05" style="width:150px;height:35px;font-size:18px"/></td>
+     <td><input type="text"    id="fm3FLDD05" style="width:350px;height:35px;font-size:18px"/></td>
+     <td><input type="number"  id="fm3FLDE05" style="width:100px;height:35px;font-size:18px"/></td>
+     <td><input type="number"  id="fm3FLDF05" style="width:100px;height:35px;font-size:18px"/></td>
+  </tr>
+
+  <tr>
+     <td><input type="number"  id="fm3FLDA06" value="06" readonly style="width:50px;height:35px;font-size:18px"/></td>
+     <td><input type="text"    id="fm3FLDB06" style="width:150px;height:35px;font-size:18px"/></td>
+     <td><input type="text"    id="fm3FLDC06" style="width:150px;height:35px;font-size:18px"/></td>
+     <td><input type="text"    id="fm3FLDD06" style="width:350px;height:35px;font-size:18px"/></td>
+     <td><input type="number"  id="fm3FLDE06" style="width:100px;height:35px;font-size:18px"/></td>
+     <td><input type="number"  id="fm3FLDF06" style="width:100px;height:35px;font-size:18px"/></td>
+  </tr>
+
+  <tr>
+     <td><input type="number"  id="fm3FLDA07" value="07" readonly style="width:50px;height:35px;font-size:18px"/></td>
+     <td><input type="text"    id="fm3FLDB07" style="width:150px;height:35px;font-size:18px"/></td>
+     <td><input type="text"    id="fm3FLDC07" style="width:150px;height:35px;font-size:18px"/></td>
+     <td><input type="text"    id="fm3FLDD07" style="width:350px;height:35px;font-size:18px"/></td>
+     <td><input type="number"  id="fm3FLDE07" style="width:100px;height:35px;font-size:18px"/></td>
+     <td><input type="number"  id="fm3FLDF07" style="width:100px;height:35px;font-size:18px"/></td>
+  </tr>
+  
+  <tr>
+     <td><input type="number"  id="fm3FLDA08" value="08" readonly style="width:50px;height:35px;font-size:18px"/></td>
+     <td><input type="text"    id="fm3FLDB08" style="width:150px;height:35px;font-size:18px"/></td>
+     <td><input type="text"    id="fm3FLDC08" style="width:150px;height:35px;font-size:18px"/></td>
+     <td><input type="text"    id="fm3FLDD08" style="width:350px;height:35px;font-size:18px"/></td>
+     <td><input type="number"  id="fm3FLDE08" style="width:100px;height:35px;font-size:18px"/></td>
+     <td><input type="number"  id="fm3FLDF08" style="width:100px;height:35px;font-size:18px"/></td>
+  </tr>
+
+  <tr>
+     <td><input type="number"  id="fm3FLDA09" value="09" readonly style="width:50px;height:35px;font-size:18px"/></td>
+     <td><input type="text"    id="fm3FLDB09" style="width:150px;height:35px;font-size:18px"/></td>
+     <td><input type="text"    id="fm3FLDC09" style="width:150px;height:35px;font-size:18px"/></td>
+     <td><input type="text"    id="fm3FLDD09" style="width:350px;height:35px;font-size:18px"/></td>
+     <td><input type="number"  id="fm3FLDE09" style="width:100px;height:35px;font-size:18px"/></td>
+     <td><input type="number"  id="fm3FLDF09" style="width:100px;height:35px;font-size:18px"/></td>
+  </tr>
+  
+</table>
+</form>
+</div>
+
+<div id="id_div_4" class="class_div">
+<form id="id_form_4" class="class_form_4">
+<!-- <h3><u>羅拉間隙記錄</u></h3>  -->
+<label>外徑尺寸</label>
+<input type="text" name="size" style="width:300px;height:35px;font-size:18px" />
+<table id="table04">
+  <tr>
+    <th>項次</th>
+    <th>對別</th>
+    <th>參考值</th>
+    <th>實際值</th>
+    <th>備註</th>
+  </tr>
+
+  <tr>
+     <td><input type="text"    id="fm4FLDA01" value="01"     readonly style="width:50px;height:35px;font-size:18px"/></td>
+     <td><input type="text"    id="fm4FLDB01" value="BD1T-B" readonly style="width:100px;height:35px;font-size:18px"/></td>
+     <td><input type="number"  id="fm4FLDC01" min="000.0" max="999.9"    style="width:100px;height:35px;font-size:18px" /></td>
+     <td><input type="number"  id="fm4FLDD01" min="000.0" max="999.9"     style="width:100px;height:35px;font-size:18px"/></td>
+     <td><input type="text"    id="fm4FLDE01" readonly               style="width:100px;height:35px;font-size:18px" /></td>
+  </tr>
+
+  <tr>
+     <td><input type="text"   id="fm4FLDA02" value="02"     readonly style="width:50px;height:35px;font-size:18px"/></td>
+     <td><input type="text"   id="fm4FLDB02" value="FS-1  " readonly style="width:100px;height:35px;font-size:18px"/></td>
+     <td><input type="number" id="fm4FLDC02" min="000.0" max="999.9"     style="width:100px;height:35px;font-size:18px"/></td>
+     <td><input type="number" id="fm4FLDD02" min="000.0" max="999.9"     style="width:100px;height:35px;font-size:18px"/></td>
+     <td><input type="text"   id="fm4FLDE02" readonly                style="width:100px;height:35px;font-size:18px"/></td>
+  </tr>
+
+  <tr>
+     <td><input type="text"   id="fm4FLDA03" value="03"     readonly style="width:50px;height:35px;font-size:18px"/></td>
+     <td><input type="text"   id="fm4FLDB03" value="BD2T-B" readonly style="width:100px;height:35px;font-size:18px"/></td>
+     <td><input type="number" id="fm4FLDC03" min="000.0" max="999.9"     style="width:100px;height:35px;font-size:18px"/></td>
+     <td><input type="number" id="fm4FLDD03" min="000.0" max="999.9"     style="width:100px;height:35px;font-size:18px" /></td>
+     <td><input type="text"   id="fm4FLDE03" readonly                style="width:100px;height:35px;font-size:18px" /></td>
+  </tr>
+
+  <tr>
+     <td><input type="text"   id="fm4FLDA04" value="04"     readonly style="width:50px;height:35px;font-size:18px"/></td>
+     <td><input type="text"   id="fm4FLDB04" value="FS-2  " readonly style="width:100px;height:35px;font-size:18px"/></td>
+     <td><input type="number" id="fm4FLDC04" min="000.0" max="999.9"     style="width:100px;height:35px;font-size:18px"/></td>
+     <td><input type="number" id="fm4FLDD04" min="000.0" max="999.9"     style="width:100px;height:35px;font-size:18px"/></td>
+     <td><input type="text"   id="fm4FLDE04" readonly                style="width:100px;height:35px;font-size:18px"/></td>
+  </tr>
+
+  <tr>
+     <td><input type="text"   id="fm4FLDA05" value="05"     readonly style="width:50px;height:35px;font-size:18px"/></td>
+     <td><input type="text"   id="fm4FLDB05" value="BD3T-B" readonly style="width:100px;height:35px;font-size:18px"/></td>
+     <td><input type="number" id="fm4FLDC05" min="000.0" max="999.9"     style="width:100px;height:35px;font-size:18px"/></td>
+     <td><input type="number" id="fm4FLDD05" min="000.0" max="999.9"     style="width:100px;height:35px;font-size:18px"/></td>
+     <td><input type="text"   id="fm4FLDE05" readonly                style="width:100px;height:35px;font-size:18px"/></td>
+  </tr>
+
+  <tr>
+     <td><input type="text"   id="fm4FLDA06" value="06"     readonly style="width:50px;height:35px;font-size:18px"/></td>
+     <td><input type="text"   id="fm4FLDB06" value="FS-3  " readonly style="width:100px;height:35px;font-size:18px"/></td>
+     <td><input type="number" id="fm4FLDC06" min="000.0" max="999.9"     style="width:100px;height:35px;font-size:18px"/></td>
+     <td><input type="number" id="fm4FLDD06" min="000.0" max="999.9"     style="width:100px;height:35px;font-size:18px"/></td>
+     <td><input type="text"   id="fm4FLDE06" readonly                style="width:100px;height:35px;font-size:18px"/></td>
+  </tr>
+
+  <tr>
+     <td><input type="text"   id="fm4FLDA07" value="07"     readonly style="width:50px;height:35px;font-size:18px"/></td>
+     <td><input type="text"   id="fm4FLDB07" value="BD4T-B" readonly style="width:100px;height:35px;font-size:18px"/></td>
+     <td><input type="number" id="fm4FLDC07" min="000.0" max="999.9"     style="width:100px;height:35px;font-size:18px"/></td>
+     <td><input type="number" id="fm4FLDD07" min="000.0" max="999.9"     style="width:100px;height:35px;font-size:18px"/></td>
+     <td><input type="text"   id="fm4FLDE07" readonly                style="width:100px;height:35px;font-size:18px"/></td>
+  </tr>
+
+  <tr>
+     <td><input type="text"   id="fm4FLDA08" value="08"     readonly style="width:50px;height:35px;font-size:18px"/></td>
+     <td><input type="text"   id="fm4FLDB08" value="FS-4  " readonly style="width:100px;height:35px;font-size:18px"/></td>
+     <td><input type="number" id="fm4FLDC08" min="000.0" max="999.9"     style="width:100px;height:35px;font-size:18px"/></td>
+     <td><input type="number" id="fm4FLDD08" min="000.0" max="999.9"     style="width:100px;height:35px;font-size:18px"/></td>
+     <td><input type="text"   id="fm4FLDE08" readonly                style="width:100px;height:35px;font-size:18px"/></td>
+  </tr>
+
+  <tr>
+     <td><input type="text"   id="fm4FLDA09" value="09"     readonly style="width:50px;height:35px;font-size:18px"/></td>
+     <td><input type="text"   id="fm4FLDB09" value="BD5T-B" readonly style="width:100px;height:35px;font-size:18px"/></td>
+     <td><input type="number" id="fm4FLDC09" min="000.0" max="999.9"     style="width:100px;height:35px;font-size:18px"/></td>
+     <td><input type="number" id="fm4FLDD09" min="000.0" max="999.9"     style="width:100px;height:35px;font-size:18px"/></td>
+     <td><input type="text"   id="fm4FLDE09" readonly                style="width:100px;height:35px;font-size:18px"/></td>
+  </tr>
+
+  <tr>
+     <td><input type="text"   id="fm4FLDA10" value="10"     readonly style="width:50px;height:35px;font-size:18px"/></td>
+     <td><input type="text"   id="fm4FLDB10" value="FS-5  " readonly style="width:100px;height:35px;font-size:18px"/></td>
+     <td><input type="number" id="fm4FLDC10" min="000.0" max="999.9"     style="width:100px;height:35px;font-size:18px"/></td>
+     <td><input type="number" id="fm4FLDD10" min="000.0" max="999.9"     style="width:100px;height:35px;font-size:18px"/></td>
+     <td><input type="text"   id="fm4FLDE10" readonly                style="width:100px;height:35px;font-size:18px"/></td>
+  </tr>
+
+  <tr>
+     <td><input type="text"   id="fm4FLDA11" value="11"     readonly style="width:50px;height:35px;font-size:18px"/></td>
+     <td><input type="text"   id="fm4FLDB11" value="FS-6  " readonly style="width:100px;height:35px;font-size:18px"/></td>
+     <td><input type="number" id="fm4FLDC11" min="000.0" max="999.9"     style="width:100px;height:35px;font-size:18px"/></td>
+     <td><input type="number" id="fm4FLDD11" min="000.0" max="999.9"     style="width:100px;height:35px;font-size:18px"/></td>
+     <td><input type="text"   id="fm4FLDE11" readonly                style="width:100px;height:35px;font-size:18px"/></td>
+  </tr>
+
+  <tr>
+     <td><input type="text"   id="fm4FLDA12" value="12"     readonly style="width:50px;height:35px;font-size:18px"/></td>
+     <td><input type="text"   id="fm4FLDB12" value="FP1T-B" readonly style="width:100px;height:35px;font-size:18px"/></td>
+     <td><input type="number" id="fm4FLDC12" min="000.0" max="999.9"     style="width:100px;height:35px;font-size:18px"/></td>
+     <td><input type="number" id="fm4FLDD12" min="000.0" max="999.9"     style="width:100px;height:35px;font-size:18px"/></td>
+     <td><input type="text"   id="fm4FLDE12" readonly                style="width:100px;height:35px;font-size:18px"/></td>
+  </tr>
+
+  <tr>
+     <td><input type="text"   id="fm4FLDA13" value="13"     readonly style="width:50px;height:35px;font-size:18px"/></td>
+     <td><input type="text"   id="fm4FLDB13" value="FS-7  " readonly style="width:100px;height:35px;font-size:18px"/></td>
+     <td><input type="number" id="fm4FLDC13" min="000.0" max="999.9"     style="width:100px;height:35px;font-size:18px"/></td>
+     <td><input type="number" id="fm4FLDD13" min="000.0" max="999.9"     style="width:100px;height:35px;font-size:18px"/></td>
+     <td><input type="text"   id="fm4FLDE13" readonly                style="width:100px;height:35px;font-size:18px"/></td>
+  </tr>
+
+  <tr>
+     <td><input type="text"   id="fm4FLDA14" value="14"     readonly style="width:50px;height:35px;font-size:18px"/></td>
+     <td><input type="text"   id="fm4FLDB14" value="FP2T-B" readonly style="width:100px;height:35px;font-size:18px"/></td>
+     <td><input type="number" id="fm4FLDC14" min="000.0" max="999.9"     style="width:100px;height:35px;font-size:18px"/></td>
+     <td><input type="number" id="fm4FLDD14" min="000.0" max="999.9"     style="width:100px;height:35px;font-size:18px"/></td>
+     <td><input type="text"   id="fm4FLDE14" readonly                style="width:100px;height:35px;font-size:18px"/></td>
+  </tr>
+
+  <tr>
+     <td><input type="text"   id="fm4FLDA15" value="15"     readonly style="width:50px;height:35px;font-size:18px"/></td>
+     <td><input type="text"   id="fm4FLDB15" value="FS-8  " readonly style="width:100px;height:35px;font-size:18px"/></td>
+     <td><input type="number" id="fm4FLDC15" min="000.0" max="999.9"     style="width:100px;height:35px;font-size:18px"/></td>
+     <td><input type="number" id="fm4FLDD15" min="000.0" max="999.9"     style="width:100px;height:35px;font-size:18px"/></td>
+     <td><input type="text"   id="fm4FLDE15" readonly                style="width:100px;height:35px;font-size:18px"/></td>
+  </tr>
+
+  <tr>
+     <td><input type="text"   id="fm4FLDA16" value="16"     readonly style="width:50px;height:35px;font-size:18px"/></td>
+     <td><input type="text"   id="fm4FLDB16" value="FP3T-B" readonly style="width:100px;height:35px;font-size:18px"/></td>
+     <td><input type="number" id="fm4FLDC16" min="000.0" max="999.9"     style="width:100px;height:35px;font-size:18px"/></td>
+     <td><input type="number" id="fm4FLDD16" min="000.0" max="999.9"     style="width:100px;height:35px;font-size:18px"/></td>
+     <td><input type="text"   id="fm4FLDE16" readonly                style="width:100px;height:35px;font-size:18px"/></td>
+  </tr>
+
+  <tr>
+     <td><input type="text"   id="fm4FLDA17" value="17"     readonly style="width:50px;height:35px;font-size:18px"/></td>
+     <td><input type="text"   id="fm4FLDB17" value="FP4T-B" readonly style="width:100px;height:35px;font-size:18px"/></td>
+     <td><input type="number" id="fm4FLDC17" min="000.0" max="999.9"     style="width:100px;height:35px;font-size:18px"/></td>
+     <td><input type="number" id="fm4FLDD17" min="000.0" max="999.9"     style="width:100px;height:35px;font-size:18px"/></td>
+     <td><input type="text"   id="fm4FLDE17" readonly                style="width:100px;height:35px;font-size:18px"/></td>
+  </tr>
+
+  <tr>
+     <td><input type="text"   id="fm4FLDA18" value="18"     readonly style="width:50px;height:35px;font-size:18px"/></td>
+     <td><input type="text"   id="fm4FLDB18" value="SG    " readonly style="width:100px;height:35px;font-size:18px"/></td>
+     <td><input type="number" id="fm4FLDC18" min="000.0" max="999.9"     style="width:100px;height:35px;font-size:18px"/></td>
+     <td><input type="number" id="fm4FLDD18" min="000.0" max="999.9"     style="width:100px;height:35px;font-size:18px"/></td>
+     <td><input type="text"   id="fm4FLDE18" readonly                style="width:100px;height:35px;font-size:18px"/></td>
+  </tr>
+
+  <tr>
+     <td><input type="text"   id="fm4FLDA19" value="19"     readonly style="width:50px;height:35px;font-size:18px"/></td>
+     <td><input type="text"   id="fm4FLDB19" value="IRT-B " readonly style="width:100px;height:35px;font-size:18px"/></td>
+     <td><input type="number" id="fm4FLDC19" min="000.0" max="999.9"     style="width:100px;height:35px;font-size:18px"/></td>
+     <td><input type="number" id="fm4FLDD19" min="000.0" max="999.9"     style="width:100px;height:35px;font-size:18px"/></td>
+     <td><input type="text"   id="fm4FLDE19" readonly                style="width:100px;height:35px;font-size:18px"/></td>
+  </tr>
+
+  <tr>
+     <td><input type="text"   id="fm4FLDA20" value="20"     readonly style="width:50px;height:35px;font-size:18px"/></td>
+     <td><input type="text"   id="fm4FLDB20" value="SS-1  " readonly style="width:100px;height:35px;font-size:18px"/></td>
+     <td><input type="number" id="fm4FLDC20" min="000.0" max="999.9"     style="width:100px;height:35px;font-size:18px"/></td>
+     <td><input type="number" id="fm4FLDD20" min="000.0" max="999.9"     style="width:100px;height:35px;font-size:18px"/></td>
+     <td><input type="text"   id="fm4FLDE20" readonly                style="width:100px;height:35px;font-size:18px"/></td>
+  </tr>
+
+  <tr>
+     <td><input type="text"   id="fm4FLDA21" value="21"     readonly style="width:50px;height:35px;font-size:18px"/></td>
+     <td><input type="text"   id="fm4FLDB21" value="S1T-B " readonly style="width:100px;height:35px;font-size:18px"/></td>
+     <td><input type="number" id="fm4FLDC21" min="000.0" max="999.9"     style="width:100px;height:35px;font-size:18px"/></td>
+     <td><input type="number" id="fm4FLDD21" min="000.0" max="999.9"     style="width:100px;height:35px;font-size:18px"/></td>
+     <td><input type="text"   id="fm4FLDE21" readonly                style="width:100px;height:35px;font-size:18px"/></td>
+  </tr>
+
+  <tr>
+     <td><input type="text"   id="fm4FLDA22" value="22"     readonly style="width:50px;height:35px;font-size:18px"/></td>
+     <td><input type="text"   id="fm4FLDB22" value="SS-2  " readonly style="width:100px;height:35px;font-size:18px"/></td>
+     <td><input type="number" id="fm4FLDC22" min="000.0" max="999.9"     style="width:100px;height:35px;font-size:18px"/></td>
+     <td><input type="number" id="fm4FLDD22" min="000.0" max="999.9"     style="width:100px;height:35px;font-size:18px"/></td>
+     <td><input type="text"   id="fm4FLDE22" readonly                style="width:100px;height:35px;font-size:18px"/></td>
+  </tr>
+
+  <tr>
+     <td><input type="text"   id="fm4FLDA23" value="23"     readonly style="width:50px;height:35px;font-size:18px"/></td>
+     <td><input type="text"   id="fm4FLDB23" value="S2T-B " readonly style="width:100px;height:35px;font-size:18px"/></td>
+     <td><input type="number" id="fm4FLDC23" min="000.0" max="999.9"     style="width:100px;height:35px;font-size:18px"/></td>
+     <td><input type="number" id="fm4FLDD23" min="000.0" max="999.9"     style="width:100px;height:35px;font-size:18px"/></td>
+     <td><input type="text"   id="fm4FLDE23" readonly                style="width:100px;height:35px;font-size:18px"/></td>
+  </tr>
+
+  <tr>
+     <td><input type="text"   id="fm4FLDA24" value="24"     readonly style="width:50px;height:35px;font-size:18px"/></td>
+     <td><input type="text"   id="fm4FLDB24" value="SS-3  " readonly style="width:100px;height:35px;font-size:18px"/></td>
+     <td><input type="number" id="fm4FLDC24" min="000.0" max="999.9"     style="width:100px;height:35px;font-size:18px"/></td>
+     <td><input type="number" id="fm4FLDD24" min="000.0" max="999.9"     style="width:100px;height:35px;font-size:18px"/></td>
+     <td><input type="text"   id="fm4FLDE24" readonly                style="width:100px;height:35px;font-size:18px"/></td>
+  </tr>
+
+  <tr>
+     <td><input type="text"   id="fm4FLDA25" value="25"     readonly style="width:50px;height:35px;font-size:18px"/></td>
+     <td><input type="text"   id="fm4FLDB25" value="S3T-B " readonly style="width:100px;height:35px;font-size:18px"/></td>
+     <td><input type="number" id="fm4FLDC25" min="000.0" max="999.9"     style="width:100px;height:35px;font-size:18px"/></td>
+     <td><input type="number" id="fm4FLDD25" min="000.0" max="999.9"     style="width:100px;height:35px;font-size:18px"/></td>
+     <td><input type="text"   id="fm4FLDE25" readonly                style="width:100px;height:35px;font-size:18px"/></td>
+  </tr>
+
+  <tr>
+     <td><input type="text"   id="fm4FLDA26" value="26"     readonly style="width:50px;height:35px;font-size:18px"/></td>
+     <td><input type="text"   id="fm4FLDB26" value="SS-4  " readonly style="width:100px;height:35px;font-size:18px"/></td>
+     <td><input type="number" id="fm4FLDC26" min="000.0" max="999.9"     style="width:100px;height:35px;font-size:18px"/></td>
+     <td><input type="number" id="fm4FLDD26" min="000.0" max="999.9"     style="width:100px;height:35px;font-size:18px"/></td>
+     <td><input type="text"   id="fm4FLDE26" readonly                style="width:100px;height:35px;font-size:18px"/></td>
+  </tr>
+
+  <tr>
+     <td><input type="text"   id="fm4FLDA27" value="27"     readonly style="width:50px;height:35px;font-size:18px"/></td>
+     <td><input type="text"   id="fm4FLDB27" value="S4T-B " readonly style="width:100px;height:35px;font-size:18px"/></td>
+     <td><input type="number" id="fm4FLDC27" min="000.0" max="999.9"     style="width:100px;height:35px;font-size:18px"/></td>
+     <td><input type="number" id="fm4FLDD27" min="000.0" max="999.9"     style="width:100px;height:35px;font-size:18px"/></td>
+     <td><input type="text"   id="fm4FLDE27" readonly                style="width:100px;height:35px;font-size:18px"/></td>
+  </tr>
+
+  <tr>
+     <td><input type="text"   id="fm4FLDA28" value="28"     readonly style="width:50px;height:35px;font-size:18px"/></td>
+     <td><input type="text"   id="fm4FLDB28" value="TH1-2 " readonly style="width:100px;height:35px;font-size:18px"/></td>
+     <td><input type="number" id="fm4FLDC28" min="000.0" max="999.9"     style="width:100px;height:35px;font-size:18px"/></td>
+     <td><input type="number" id="fm4FLDD28" min="000.0" max="999.9"     style="width:100px;height:35px;font-size:18px"/></td>
+     <td><input type="text"   id="fm4FLDE28" readonly                style="width:100px;height:35px;font-size:18px"/></td>
+  </tr>
+
+</table>
+</form>
+</div>
+
+<script>  
+     var strUrl = window.location.search;  
+        var getPara,paraVal;
+        var aryPara = [];        
+                              
+  window.onload = function (){   
+                    BackFM1(); 
+                    getUserid();
+
+            if (strUrl != -1){
+              getSearch = strUrl.split("?");
+              getPara = getSearch[1].split("&");
+              for (i = 0; i < getPara.length; i++){
+                 paraVal = getPara[i].split("=");
+                 aryPara.push(paraVal[0]);                
+                 aryPara[paraVal[0]]=paraVal[1];                
+                 }     
+              functionA1();
+              getSelectPMM62();                    
+            }  
+       }
+
+  // function functionA1()
+  function functionA1(){
+    var date  = new Date();
+    var day   = date.getDate();
+    var month = date.getMonth() + 1;
+    var year  = date.getFullYear();
+    var grpId = "";
+
+    day = aryPara.dateId.substr(6,2);
+    month = aryPara.dateId.substr(4,2);
+    year  = aryPara.dateId.substr(0,4);
+
+//    if (month < 10) month = "0" + month;
+//    if (day   < 10) day   = "0" + day;
+
+    if (aryPara.groupId === "A1" ) { grpId = "A1-07:00~15:30"; }
+    if (aryPara.groupId === "A2" ) { grpId = "A2-15:30~24:00"; }
+    if (aryPara.groupId === "A3" ) { grpId = "A3-24:00~07:00"; }
+    if (aryPara.groupId === "B1" ) { grpId = "B1-07:00~19:00"; }
+    if (aryPara.groupId === "B2" ) { grpId = "B2-19:00~07:00"; }
+
+    var today = year + "-" + month + "-" + day;       
+    document.getElementById("grpPmm61a").value = grpId;
+    document.getElementById("mchPmm61a").value  = aryPara.machineId;
+    console.log("today --->" + today);
+    document.getElementById("datePmm61a").value = today;
+    }
+
+
+  // function BackFM1()
+  function BackFM1() {  openCity(event, 'id_div_1'); }
+
+
+  // function getUserid()
+  function getUserid() { 
+    var  args  =  new  Object();
+    var  heading  =  [];
+    var  query    =  location.search.substring(1);  
+    var  pairs    =  query.split("&");
+    
+    for  (var i = 0; i<pairs.length;i++) {
+      var  pos  =  pairs[i].indexOf("=");
+      if  (pos == -1) continue;
+      var argname = pairs[i].substring(0, pos);     
+      var value   = pairs[i].substring(pos+1);     
+      args[argname] = decodeURIComponent(value);     
+      heading[i]    = argname;
+
+      document.getElementById('useridPmm61a').value = args['userId'];
+
+      }
+    }
+
+//*************************************************************************
+//*** 取得 MYPMM62A 的錯誤原因資料,並置入 Select 網頁段
+//***********************************************************
+function getSelectPMM62() {
+
+  var cempIdx  = document.getElementById('useridPmm61a').value;
+  var urlGrpId = document.getElementById('grpPmm61a').value  ;
+  var dropdown00    =  [];
+  var dropdown01    =  [];
+  var dropdownMM    =  [];
+  var dropdownM1    =  [];
+  var dropdownHH    =  [];
+  var dropdownH1    =  [];
+  var optSlt00      =  [];
+  var optSlt01      =  [];
+  var optSltMM      =  [];
+  var optSltM1      =  [];
+  var k             =  0 ;
+  var dropdown      =  document.getElementById('REASON01x');
+      dropdown00[0] =  document.getElementById( 'fm1FLDG01' );
+      dropdown00[1] =  document.getElementById( 'fm1FLDG02' );
+      dropdown00[2] =  document.getElementById( 'fm1FLDG03' );
+      dropdown00[3] =  document.getElementById( 'fm1FLDG04' );
+      dropdown00[4] =  document.getElementById( 'fm1FLDG05' );
+      dropdown00[5] =  document.getElementById( 'fm1FLDG06' );
+      dropdown00[6] =  document.getElementById( 'fm1FLDG07' );
+      dropdown00[7] =  document.getElementById( 'fm1FLDG08' );
+      dropdown00[8] =  document.getElementById( 'fm1FLDG09' );
+      dropdown01[0] =  document.getElementById( 'fm1FLDF01' );
+      dropdown01[1] =  document.getElementById( 'fm1FLDF02' );
+      dropdown01[2] =  document.getElementById( 'fm1FLDF03' );
+      dropdown01[3] =  document.getElementById( 'fm1FLDF04' );
+      dropdown01[4] =  document.getElementById( 'fm1FLDF05' );
+      dropdown01[5] =  document.getElementById( 'fm1FLDF06' );
+      dropdown01[6] =  document.getElementById( 'fm1FLDF07' );
+      dropdown01[7] =  document.getElementById( 'fm1FLDF08' );
+      dropdown01[8] =  document.getElementById( 'fm1FLDF09' );
+      dropdownMM[0] =  document.getElementById( 'fm1FLDE01' );
+      dropdownMM[1] =  document.getElementById( 'fm1FLDE02' );
+      dropdownMM[2] =  document.getElementById( 'fm1FLDE03' );
+      dropdownMM[3] =  document.getElementById( 'fm1FLDE04' );
+      dropdownMM[4] =  document.getElementById( 'fm1FLDE05' );
+      dropdownMM[5] =  document.getElementById( 'fm1FLDE06' );
+      dropdownMM[6] =  document.getElementById( 'fm1FLDE07' );
+      dropdownMM[7] =  document.getElementById( 'fm1FLDE08' );
+      dropdownMM[8] =  document.getElementById( 'fm1FLDE09' );
+      dropdownHH[0] =  document.getElementById( 'fm1FLDD01' );
+      dropdownHH[1] =  document.getElementById( 'fm1FLDD02' );
+      dropdownHH[2] =  document.getElementById( 'fm1FLDD03' );
+      dropdownHH[3] =  document.getElementById( 'fm1FLDD04' );
+      dropdownHH[4] =  document.getElementById( 'fm1FLDD05' );
+      dropdownHH[5] =  document.getElementById( 'fm1FLDD06' );
+      dropdownHH[6] =  document.getElementById( 'fm1FLDD07' );
+      dropdownHH[7] =  document.getElementById( 'fm1FLDD08' );
+      dropdownHH[8] =  document.getElementById( 'fm1FLDD09' );
+      dropdownM1[0] =  document.getElementById( 'fm1FLDC01' );
+      dropdownM1[1] =  document.getElementById( 'fm1FLDC02' );
+      dropdownM1[2] =  document.getElementById( 'fm1FLDC03' );
+      dropdownM1[3] =  document.getElementById( 'fm1FLDC04' );
+      dropdownM1[4] =  document.getElementById( 'fm1FLDC05' );
+      dropdownM1[5] =  document.getElementById( 'fm1FLDC06' );
+      dropdownM1[6] =  document.getElementById( 'fm1FLDC07' );
+      dropdownM1[7] =  document.getElementById( 'fm1FLDC08' );
+      dropdownM1[8] =  document.getElementById( 'fm1FLDC09' );
+      dropdownH1[0] =  document.getElementById( 'fm1FLDB01' );
+      dropdownH1[1] =  document.getElementById( 'fm1FLDB02' );
+      dropdownH1[2] =  document.getElementById( 'fm1FLDB03' );
+      dropdownH1[3] =  document.getElementById( 'fm1FLDB04' );
+      dropdownH1[4] =  document.getElementById( 'fm1FLDB05' );
+      dropdownH1[5] =  document.getElementById( 'fm1FLDB06' );
+      dropdownH1[6] =  document.getElementById( 'fm1FLDB07' );
+      dropdownH1[7] =  document.getElementById( 'fm1FLDB08' );
+      dropdownH1[8] =  document.getElementById( 'fm1FLDB09' );
+      console.log("dropdown00[7]-->" + dropdown00[7] );
+//    dropdown.length = 0;
+
+  let defaultOption = document.createElement('option');
+  defaultOption.text = '選擇停車原因';
+
+  var urlSelect = 'http://172.16.1.222:10010/web/services/WEB10R/INQ_MYPMM62A__' + '______' + cempIdx  ;
+      urlSelect = 'http://172.16.1.222:10010/web/services/WEB10R/INQ_PMM62A_'+ urlGrpId.substr(0,2) +'_' + '______' + cempIdx  ;
+  const requestSelect = new XMLHttpRequest();
+  requestSelect.open('GET', urlSelect, false);
+  requestSelect.onreadystatechange = function(){
+    if (requestSelect.readyState == 4  ) {
+       var dataSelect = JSON.parse(requestSelect.responseText);
+       for (let i = 0;  i < JSON.stringify(dataSelect.getSltP62s.length); i++) {
+         optionSelect = document.createElement('option');
+         optionSelect.text  = JSON.parse( JSON.stringify(dataSelect.getSltP62s[i].getSltTxt) );
+         optionSelect.value = JSON.stringify(dataSelect.getSltP62s[i].getSltOpt).replace(/"/g, "") ;
+         if (JSON.parse( JSON.stringify(dataSelect.getSltP62s[i].getSltPgm) ) === 'TYPE01') {
+//            console.log("text-->" + optionSelect.text + "value-->" + optionSelect.value );
+//            dropdown.add(optionSelect);
+            for (let j = 0; j < 9 ; j++ ) {
+              optSlt00[j]    = document.createElement('option');
+              optSlt00[j].text  = JSON.parse( JSON.stringify(dataSelect.getSltP62s[i].getSltTxt) );
+              optSlt00[j].value = JSON.stringify(dataSelect.getSltP62s[i].getSltOpt).replace(/"/g, "") ;
+              console.log("text-->" + optSlt00[j].text + "value-->" + optSlt00[j].value );
+              dropdown00[j].add(optSlt00[j]);
+              }
+            }
+         if (JSON.parse( JSON.stringify(dataSelect.getSltP62s[i].getSltPgm) ) === 'TYPE02') {
+//            console.log("text-->" + optionSelect.text + "value-->" + optionSelect.value );
+//            dropdown.add(optionSelect);
+            for (let j = 0; j < 9 ; j++ ) {
+              optSlt01[j]    = document.createElement('option');
+              optSlt01[j].text  = JSON.parse( JSON.stringify(dataSelect.getSltP62s[i].getSltTxt) );
+              optSlt01[j].value = JSON.stringify(dataSelect.getSltP62s[i].getSltOpt).replace(/"/g, "") ;
+              console.log("text-->" + optSlt00[j].text + "value-->" + optSlt00[j].value );
+              dropdown01[j].add(optSlt01[j]);
+              }
+            }
+         if (JSON.parse( JSON.stringify(dataSelect.getSltP62s[i].getSltPgm) ) === 'TYPEMM') {
+            for (let j = 0; j < 9 ; j++ ) {
+              optSltMM[j]    = document.createElement('option');
+              optSltMM[j].text  = JSON.parse( JSON.stringify(dataSelect.getSltP62s[i].getSltTxt) );
+              optSltMM[j].value = JSON.stringify(dataSelect.getSltP62s[i].getSltOpt).replace(/"/g, "") ;
+              console.log("text-->" + optSltMM[j].text + "value-->" + optSltMM[j].value );
+              dropdownMM[j].add(optSltMM[j]);
+              }
+            }
+         if (JSON.parse( JSON.stringify(dataSelect.getSltP62s[i].getSltPgm) ) === 'TYPEMM') {
+            for (let j = 0; j < 9 ; j++ ) {
+              optSltMM[j]    = document.createElement('option');
+              optSltMM[j].text  = JSON.parse( JSON.stringify(dataSelect.getSltP62s[i].getSltTxt) );
+              optSltMM[j].value = JSON.stringify(dataSelect.getSltP62s[i].getSltOpt).replace(/"/g, "") ;
+              dropdownM1[j].add(optSltMM[j]);
+              }
+            }
+         if (JSON.parse( JSON.stringify(dataSelect.getSltP62s[i].getSltPgm) ) === 'TYPEHH') {
+            for (let j = 0; j < 9 ; j++ ) {
+              optSltMM[j]    = document.createElement('option');
+              optSltMM[j].text  = JSON.parse( JSON.stringify(dataSelect.getSltP62s[i].getSltTxt) );
+              optSltMM[j].value = JSON.stringify(dataSelect.getSltP62s[i].getSltOpt).replace(/"/g, "") ;
+              dropdownH1[j].add(optSltMM[j]);
+              }
+            }
+         if (JSON.parse( JSON.stringify(dataSelect.getSltP62s[i].getSltPgm) ) === 'TYPEHH') {
+            for (let j = 0; j < 9 ; j++ ) {
+              optSltMM[j]    = document.createElement('option');
+              optSltMM[j].text  = JSON.parse( JSON.stringify(dataSelect.getSltP62s[i].getSltTxt) );
+              optSltMM[j].value = JSON.stringify(dataSelect.getSltP62s[i].getSltOpt).replace(/"/g, "") ;
+              dropdownHH[j].add(optSltMM[j]);
+              }
+            }
+         }
+       }
+    }
+  requestSelect.open("GET" , urlSelect, true);
+  requestSelect.send();
+  }
+
+
+  //*************************************************************************
+  // function chainPmm61() 使用 CREATE08 API 取得 MYPMM61A 資料
+  //*************************************************************************
+  function chainPmm61() {
+
+    var fldString; 
+    var subString;
+    var valString;
+    var s1 = 01;
+    var dataString='{';
+
+    var  d  =  document.getElementById( 'datePmm61a'   ).value ;
+         d  =  d.replace(/\-/g,"");
+
+    subString    =   document.getElementById( 'grpPmm61a' ).value;
+  //console.log(subString);
+
+    dataString   =   dataString  +  '"mchPmm61a":"'    + document.getElementById( 'mchPmm61a'    ).value + '",' ;
+    dataString   =   dataString  +  '"datePmm61a":"'   + d                                               + '",' ;
+    dataString   =   dataString  +  '"grpPmm61a":"'    + subString.substr(0,2) + '",' ;
+    dataString   =   dataString  +  '"useridPmm61a":"' + document.getElementById( 'useridPmm61a' ).value + '"}' ;
+
+    console.log("dataString-->" + dataString);
+    // 字串轉陣列
+    var  jsonParse    =  JSON.parse( dataString );
+    // 陣列轉物件
+    var  jsonData     =  JSON.stringify( jsonParse );
+ 
+    var  jsonForm      =  "fm3";
+    var  jsonStrA     =  "FLDA0";
+    var  jsonStrB     =  "FLDB0";
+    var  jsonStrC     =  "FLDC0";
+    var  jsonStrD     =  "FLDD0";
+    var  jsonStrE     =  "FLDE0";
+    var  jsonStrF     =  "FLDF0";
+    var  jsonStrG     =  "FLDG0";
+    var  jsonStrH     =  "FLDH0";
+    var  jsonStrI     =  "FLDI0";
+    var  jsonStrJ     =  "FLDJ0";
+    var  jsonStrK     =  "FLDK0";
+    var  jsonStrL     =  "FLDL0";
+    var  jsonStrM     =  "FLDM0";
+    var  jsonStrN     =  "FLDN0";
+
+    var  jsonStrA0    =  "FLDA";
+    var  jsonStrB0    =  "FLDB";
+    var  jsonStrC0    =  "FLDC";
+    var  jsonStrD0    =  "FLDD";
+    var  jsonStrE0    =  "FLDE";
+    var  jsonStrF0    =  "FLDF";
+    var  jsonStrG0    =  "FLDG";
+    var  jsonStrH0    =  "FLDH";
+    var  jsonStrI0    =  "FLDI";
+    var  jsonStrJ0    =  "FLDJ";
+    var  jsonStrK0    =  "FLDK";
+    var  jsonStrL0    =  "FLDL";
+    var  jsonStrM0    =  "FLDM";
+    var  jsonStrN0    =  "FLDN";
+
+    console.log ("jsonData-->" + jsonData );
+
+    var  create08Url  =  'http://172.16.1.222:10010/web/services/WEB10R/CREATE08' ;
+
+    let xhr = new XMLHttpRequest();                                                                                             
+    xhr.onreadystatechange = function () {                                                                                      
+      if (xhr.readyState == 4) {                                                                                                
+         console.log(xhr.status);                                                                                               
+         var jsonChkObj = JSON.parse( xhr.responseText );                                                                            
+         console.log("aa XHR-->" + JSON.stringify( jsonChkObj ) );                                                               
+ //      alert( jsonChkObj.dtaOut8s.dtaFldRes );        
+         for (var s1 = 1; s1 < 10 ; s1++) {
+           jsonForm  =  "fm3";
+           var  jsonStr    =  jsonForm + jsonStrA +  s1 ;  document.getElementById(jsonStr).value =  jsonChkObj.dtaOut8s[jsonStr] ;
+           var  jsonStr    =  jsonForm + jsonStrB +  s1 ;  document.getElementById(jsonStr).value =  jsonChkObj.dtaOut8s[jsonStr] ;
+           var  jsonStr    =  jsonForm + jsonStrC +  s1 ;  document.getElementById(jsonStr).value =  jsonChkObj.dtaOut8s[jsonStr] ;
+           var  jsonStr    =  jsonForm + jsonStrD +  s1 ;  document.getElementById(jsonStr).value =  jsonChkObj.dtaOut8s[jsonStr] ;
+           var  jsonStr    =  jsonForm + jsonStrE +  s1 ;  document.getElementById(jsonStr).value = Number( jsonChkObj.dtaOut8s[jsonStr] );
+           var  jsonStr    =  jsonForm + jsonStrF +  s1 ;  document.getElementById(jsonStr).value = Number( jsonChkObj.dtaOut8s[jsonStr] );
+           jsonForm  =  "fm2";
+           var  jsonStr    =  jsonForm + jsonStrA +  s1 ;  document.getElementById(jsonStr).value =  jsonChkObj.dtaOut8s[jsonStr] ;
+           var  jsonStr    =  jsonForm + jsonStrB +  s1 ;  document.getElementById(jsonStr).value =  jsonChkObj.dtaOut8s[jsonStr] ;
+           var  jsonStr    =  jsonForm + jsonStrC +  s1 ;  document.getElementById(jsonStr).value =  jsonChkObj.dtaOut8s[jsonStr] ;
+           var  jsonStr    =  jsonForm + jsonStrD +  s1 ;  document.getElementById(jsonStr).value =  jsonChkObj.dtaOut8s[jsonStr] ;
+           var  jsonStr    =  jsonForm + jsonStrE +  s1 ;  document.getElementById(jsonStr).value = Number( jsonChkObj.dtaOut8s[jsonStr] );
+           var  jsonStr    =  jsonForm + jsonStrF +  s1 ;  document.getElementById(jsonStr).value = Number( jsonChkObj.dtaOut8s[jsonStr] );
+           var  jsonStr    =  jsonForm + jsonStrG +  s1 ;  document.getElementById(jsonStr).value = Number( jsonChkObj.dtaOut8s[jsonStr] );
+           var  jsonStr    =  jsonForm + jsonStrH +  s1 ;  document.getElementById(jsonStr).value = Number( jsonChkObj.dtaOut8s[jsonStr] );
+           var  jsonStr    =  jsonForm + jsonStrI +  s1 ;  document.getElementById(jsonStr).value = Number( jsonChkObj.dtaOut8s[jsonStr] );
+           var  jsonStr    =  jsonForm + jsonStrJ +  s1 ;  document.getElementById(jsonStr).value = Number( jsonChkObj.dtaOut8s[jsonStr] );
+           var  jsonStr    =  jsonForm + jsonStrK +  s1 ;  document.getElementById(jsonStr).value = Number( jsonChkObj.dtaOut8s[jsonStr] );
+           var  jsonStr    =  jsonForm + jsonStrL +  s1 ;  document.getElementById(jsonStr).value = Number( jsonChkObj.dtaOut8s[jsonStr] );
+           var  jsonStr    =  jsonForm + jsonStrM +  s1 ;  document.getElementById(jsonStr).value = Number( jsonChkObj.dtaOut8s[jsonStr] );
+           var  jsonStr    =  jsonForm + jsonStrN +  s1 ;  document.getElementById(jsonStr).value = Number( jsonChkObj.dtaOut8s[jsonStr] );
+           jsonForm  =  "fm1";
+           var  jsonStr    =  jsonForm + jsonStrA +  s1 ;  document.getElementById(jsonStr).value =         jsonChkObj.dtaOut8s[jsonStr]  ;
+           var  jsonStr    =  jsonForm + jsonStrB +  s1 ;  document.getElementById(jsonStr).value =         jsonChkObj.dtaOut8s[jsonStr]  ;
+           var  jsonStr    =  jsonForm + jsonStrC +  s1 ;  document.getElementById(jsonStr).value =         jsonChkObj.dtaOut8s[jsonStr]  ;
+           var  jsonStr    =  jsonForm + jsonStrD +  s1 ;  document.getElementById(jsonStr).value =         jsonChkObj.dtaOut8s[jsonStr]  ;
+           var  jsonStr    =  jsonForm + jsonStrE +  s1 ;  document.getElementById(jsonStr).value =         jsonChkObj.dtaOut8s[jsonStr]  ;
+           var  jsonStr    =  jsonForm + jsonStrF +  s1 ;  document.getElementById(jsonStr).value =         jsonChkObj.dtaOut8s[jsonStr]  ;
+           var  jsonStr    =  jsonForm + jsonStrG +  s1 ;  document.getElementById(jsonStr).value =         jsonChkObj.dtaOut8s[jsonStr].substr(0,3)  ;
+           }
+         for (var s1 = 1; s1 < 29 ; s1++) {
+           jsonForm  =  "fm4";
+           if   (s1 < 10) {
+             var  jsonStr    =  jsonForm + jsonStrA0 + '0' + s1 ;  document.getElementById(jsonStr).value =         jsonChkObj.dtaOut8s[jsonStr]  ;
+             var  jsonStr    =  jsonForm + jsonStrB0 + '0' + s1 ;  document.getElementById(jsonStr).value =         jsonChkObj.dtaOut8s[jsonStr]  ;
+             var  jsonStr    =  jsonForm + jsonStrC0 + '0' + s1 ;  document.getElementById(jsonStr).value = Number( jsonChkObj.dtaOut8s[jsonStr] );
+             var  jsonStr    =  jsonForm + jsonStrD0 + '0' + s1 ;  document.getElementById(jsonStr).value = Number( jsonChkObj.dtaOut8s[jsonStr] );
+             var  jsonStr    =  jsonForm + jsonStrE0 + '0' + s1 ;  document.getElementById(jsonStr).value =         jsonChkObj.dtaOut8s[jsonStr]  ;
+             } else {
+             var  jsonStr    =  jsonForm + jsonStrA0 +  s1 ;  document.getElementById(jsonStr).value =         jsonChkObj.dtaOut8s[jsonStr]  ;
+             var  jsonStr    =  jsonForm + jsonStrB0 +  s1 ;  document.getElementById(jsonStr).value =         jsonChkObj.dtaOut8s[jsonStr]  ;
+             var  jsonStr    =  jsonForm + jsonStrC0 +  s1 ;  document.getElementById(jsonStr).value = Number( jsonChkObj.dtaOut8s[jsonStr] );
+             var  jsonStr    =  jsonForm + jsonStrD0 +  s1 ;  document.getElementById(jsonStr).value = Number( jsonChkObj.dtaOut8s[jsonStr] );
+             var  jsonStr    =  jsonForm + jsonStrE0 +  s1 ;  document.getElementById(jsonStr).value =         jsonChkObj.dtaOut8s[jsonStr]  ;
+             }
+           }
+         alert( jsonChkObj.dtaOut8s.dtaFldRes );  
+         }                                                                                                                      
+      }
+      xhr.open("POST", create08Url , false );                         
+      xhr.setRequestHeader('Accept', 'application/json');           
+      xhr.setRequestHeader('Content-Type', 'application/json');     
+      xhr.send( jsonData );     
+
+      return;
+    }
+
+  // function chainAction(itemNo)
+  function chainAction( itemNo ) {
+    var itemID      =  "fm1FLDA" + itemNo;
+    var itemHHSTR   =  "fm1FLDB" + itemNo;
+    var itemMMSTR   =  "fm1FLDC" + itemNo;
+    var itemHHEND   =  "fm1FLDD" + itemNo;
+    var itemMMEND   =  "fm1FLDE" + itemNo;
+    var itemTYPE    =  "fm1FLDF" + itemNo;
+    var itemREASON  =  "fm1FLDG" + itemNo;
+
+    var itemIDx     =  "No01x"     ;
+    var itemHHSTRx  =  "HHSTR01x"  ;
+    var itemMMSTRx  =  "MMSTR01x"  ;
+    var itemHHENDx  =  "HHEND01x"  ;
+    var itemMMENDx  =  "MMEND01x"  ;
+    var itemTYPEx   =  "TYPE01x"   ;
+    var itemREASONx =  "REASON01x" ;
+
+    var a1     = document.getElementById( itemID     ).value  ; 
+    var a2     = document.getElementById( itemHHSTR  ).value  ;
+    var a3     = document.getElementById( itemMMSTR  ).value  ; 
+    var a4     = document.getElementById( itemHHEND  ).value  ;
+    var a5     = document.getElementById( itemMMEND  ).value  ; 
+    var a6     = document.getElementById( itemTYPE   ).value  ;
+    var a7     = document.getElementById( itemREASON ).value  ;
+
+    document.getElementById( itemIDx     ).value = a1 ;
+    document.getElementById( itemHHSTRx  ).value = a2 ;
+    document.getElementById( itemMMSTRx  ).value = a3 ; 
+    document.getElementById( itemHHENDx  ).value = a4 ;
+    document.getElementById( itemMMENDx  ).value = a5 ; 
+    document.getElementById( itemTYPEx   ).value = a6 ;
+    document.getElementById( itemREASONx ).value = a7 ;
+  }
+
+  // function updAction()
+  function updAction() {
+
+    var itemIDx     =  "No01x"     ;
+    var itemHHSTRx  =  "HHSTR01x"  ;
+    var itemMMSTRx  =  "MMSTR01x"  ;
+    var itemHHENDx  =  "HHEND01x"  ;
+    var itemMMENDx  =  "MMEND01x"  ;
+    var itemTYPEx   =  "TYPE01x"   ;
+    var itemREASONx =  "REASON01x" ;
+
+    var itemNo      =  document.getElementById ( itemIDx ).value ;
+
+    var itemID      =  "fm1FLDA" + itemNo;
+    var itemHHSTR   =  "fm1FLDB" + itemNo;
+    var itemMMSTR   =  "fm1FLDC" + itemNo;
+    var itemHHEND   =  "fm1FLDD" + itemNo;
+    var itemMMEND   =  "fm1FLDE" + itemNo;
+    var itemTYPE    =  "fm1FLDF" + itemNo;
+    var itemREASON  =  "fm1FLDG" + itemNo;
+
+    var a1     = document.getElementById( itemIDx     ).value  ; 
+    var a2     = document.getElementById( itemHHSTRx  ).value  ;
+    var a3     = document.getElementById( itemMMSTRx  ).value  ; 
+    var a4     = document.getElementById( itemHHENDx  ).value  ;
+    var a5     = document.getElementById( itemMMENDx  ).value  ; 
+    var a6     = document.getElementById( itemTYPEx   ).value  ;
+    var a7     = document.getElementById( itemREASONx ).value  ;
+
+    var a7a    = document.getElementById( itemREASONx );
+    var a7aText= a7a.options[a7a.selectedIndex].text;
+
+    document.getElementById( itemID     ).value = a1 ;
+    document.getElementById( itemHHSTR  ).value = a2 ;
+    document.getElementById( itemMMSTR  ).value = a3 ; 
+    document.getElementById( itemHHEND  ).value = a4 ;
+    document.getElementById( itemMMEND  ).value = a5 ; 
+    document.getElementById( itemTYPE   ).value = a6 ;
+    document.getElementById( itemREASON ).value = a7aText ;
+  }
+
+  // function openCity()
+  function openCity(evt, cityName) {
+    var i, tabcontent, tablinks;
+    tabcontent = document.getElementsByClassName("class_div");
+    for (i = 0; i < tabcontent.length; i++) {
+      tabcontent[i].style.display = "none";
+    }
+    tablinks = document.getElementsByClassName("tablinks");
+    for (i = 0; i < tablinks.length; i++) {
+      tablinks[i].className = tablinks[i].className.replace(" active", "");
+//      if  (i === 0){ document.getElementById( "heading" ).innerHTML = "AA" + i;}
+//      if  (i === 1){ document.getElementById( "heading" ).innerHTML = "BB" + i;}
+//      if  (i === 2){ document.getElementById( "heading" ).innerHTML = "CC" + i;}
+//      if  (i === 3){ document.getElementById( "heading" ).innerHTML = "DD" + i;}
+//      if  (i === 4){ document.getElementById( "heading" ).innerHTML = "EE" + i;}
+//      if  (i === 5){ document.getElementById( "heading" ).innerHTML = "FF" + i;}
+    }
+    document.getElementById(cityName).style.display = "block";
+    evt.currentTarget.className += " active";
+    if (cityName === "id_div_1" ) { document.getElementById( "heading" ).innerHTML = "製管生產記錄－停車停車" ;}
+    if (cityName === "id_div_2" ) { document.getElementById( "heading" ).innerHTML = "製管生產記錄－鋼管產出" ;}
+    if (cityName === "id_div_3" ) { document.getElementById( "heading" ).innerHTML = "製管生產記錄－領用鋼帶" ;}
+    if (cityName === "id_div_4" ) { document.getElementById( "heading" ).innerHTML = "製管生產記錄－羅拉間隙" ;}
+  }
+
+//***********************************************************
+//*** 取得 MYIDM24A 的簽核資料,並置入 Select 網頁段
+//***********************************************************
+function getSignIDM24() {
+
+  var dropdown = document.getElementById('dtaInpFlo');
+
+  dropdown.length = 0;
+
+  let defaultOption = document.createElement('option');
+  defaultOption.text = '選擇簽核流程';
+
+  const urlSelect = 'http://172.16.1.222:10010/web/services/WEB10R/INQ_MYAPT42A__' + cempIdx;
+
+// alert( urlSelect );
+  const requestSelect = new XMLHttpRequest();
+  requestSelect.open('GET', urlSelect, false);
+  requestSelect.onreadystatechange = function(){
+    if (requestSelect.readyState == 4  ) {
+       var dataSelect = JSON.parse(requestSelect.responseText);
+       console.log("dataSelect--->" + requestSelect.responseText);
+       for (let i = 0;  i < JSON.stringify(dataSelect.getSltRecs.length); i++) {
+         optionSelect = document.createElement('option');
+         optionSelect.text  = JSON.stringify(dataSelect.getSltRecs[i].getSltOpt).replace(/"/g, "");
+         optionSelect.value = JSON.stringify(dataSelect.getSltRecs[i].getSltOpt).replace(/"/g, "");
+         dropdown.add(optionSelect);
+         }
+       }
+    }
+  requestSelect.open("GET" , urlSelect, true);
+  requestSelect.send();
+  }
+
+//***********************************************************
+//*** 多筆 JSON 資料同時上傳
+//*********************************************************** 
+function pmm61Upload() {
+
+  var fldString; 
+  var valString;
+  var s1 = 01;
+  var dataString='{';
+
+  var  d  =  document.getElementById( 'datePmm61a'   ).value ;
+       d  =  d.replace(/\-/g,"");
+
+  var subString    =   document.getElementById( 'grpPmm61a' ).value;
+
+  dataString   =   dataString  +  '"mchPmm61a":"'    + document.getElementById( 'mchPmm61a'    ).value + '",' ;
+  dataString   =   dataString  +  '"datePmm61a":"'   + d                                               + '",' ;
+  dataString   =   dataString  +  '"grpPmm61a":"'    + subString.substr(0,2) + '",' ;
+  dataString   =   dataString  +  '"useridPmm61a":"' + document.getElementById( 'useridPmm61a' ).value + '",' ;
+
+
+  for (var i = 1 ; i < 10 ; i ++) {
+    var oprString = 'fm2FLDA0' + i;  dataString = dataString + '"' + oprString + '":"' + document.getElementById( oprString ).value + '",' ;
+    var oprString = 'fm2FLDB0' + i;  dataString = dataString + '"' + oprString + '":"' + document.getElementById( oprString ).value + '",' ;
+    var oprString = 'fm2FLDC0' + i;  dataString = dataString + '"' + oprString + '":"' + document.getElementById( oprString ).value + '",' ;
+    var oprString = 'fm2FLDD0' + i;  dataString = dataString + '"' + oprString + '":"' + document.getElementById( oprString ).value + '",' ;
+    var oprString = 'fm2FLDE0' + i;  dataString = dataString + '"' + oprString + '":"' + document.getElementById( oprString ).value + '",' ;
+    var oprString = 'fm2FLDF0' + i;  dataString = dataString + '"' + oprString + '":"' + document.getElementById( oprString ).value + '",' ;
+    var oprString = 'fm2FLDG0' + i;  dataString = dataString + '"' + oprString + '":"' + document.getElementById( oprString ).value + '",' ;
+    var oprString = 'fm2FLDH0' + i;  dataString = dataString + '"' + oprString + '":"' + document.getElementById( oprString ).value + '",' ;
+    var oprString = 'fm2FLDI0' + i;  dataString = dataString + '"' + oprString + '":"' + document.getElementById( oprString ).value + '",' ;
+    var oprString = 'fm2FLDJ0' + i;  dataString = dataString + '"' + oprString + '":"' + document.getElementById( oprString ).value + '",' ;
+    var oprString = 'fm2FLDK0' + i;  dataString = dataString + '"' + oprString + '":"' + document.getElementById( oprString ).value + '",' ;
+    var oprString = 'fm2FLDL0' + i;  dataString = dataString + '"' + oprString + '":"' + document.getElementById( oprString ).value + '",' ;
+    var oprString = 'fm2FLDM0' + i;  dataString = dataString + '"' + oprString + '":"' + document.getElementById( oprString ).value + '",' ;
+    var oprString = 'fm2FLDN0' + i;  dataString = dataString + '"' + oprString + '":"' + document.getElementById( oprString ).value + '",' ;
+    }
+
+  for (var i = 1 ; i < 10 ; i ++) {
+    var oprString = 'fm3FLDA0' + i;  dataString = dataString + '"' + oprString + '":"' + document.getElementById( oprString ).value + '",' ;
+    var oprString = 'fm3FLDB0' + i;  dataString = dataString + '"' + oprString + '":"' + document.getElementById( oprString ).value + '",' ;
+    var oprString = 'fm3FLDC0' + i;  dataString = dataString + '"' + oprString + '":"' + document.getElementById( oprString ).value + '",' ;
+    var oprString = 'fm3FLDD0' + i;  dataString = dataString + '"' + oprString + '":"' + document.getElementById( oprString ).value + '",' ;
+    var oprString = 'fm3FLDE0' + i;  dataString = dataString + '"' + oprString + '":"' + document.getElementById( oprString ).value + '",' ;
+    var oprString = 'fm3FLDF0' + i;  dataString = dataString + '"' + oprString + '":"' + document.getElementById( oprString ).value + '",' ;
+    }
+
+  for (var i = 1 ; i < 10 ; i ++) {
+    var oprString = 'fm1FLDA0' + i;  dataString = dataString + '"' + oprString + '":"' + document.getElementById( oprString ).value + '",' ;
+    var oprString = 'fm1FLDB0' + i;  dataString = dataString + '"' + oprString + '":"' + document.getElementById( oprString ).value + '",' ;
+    var oprString = 'fm1FLDC0' + i;  dataString = dataString + '"' + oprString + '":"' + document.getElementById( oprString ).value + '",' ;
+    var oprString = 'fm1FLDD0' + i;  dataString = dataString + '"' + oprString + '":"' + document.getElementById( oprString ).value + '",' ;
+    var oprString = 'fm1FLDE0' + i;  dataString = dataString + '"' + oprString + '":"' + document.getElementById( oprString ).value + '",' ;
+    var oprString = 'fm1FLDF0' + i;  dataString = dataString + '"' + oprString + '":"' + document.getElementById( oprString ).value + '",' ;
+    var oprString = 'fm1FLDG0' + i;  dataString = dataString + '"' + oprString + '":"' + document.getElementById( oprString ).value + '",' ;
+    }
+
+  
+  for (var i = 1 ; i < 29 ; i ++) {
+    if ( i < 10 ) {  oprString  =  'fm4FLDA0' + i ; } else { oprString  =  'fm4FLDA' + i ; } ; console.log("oprString-->" + oprString);
+                     dataString = dataString + '"' + oprString + '":"' + document.getElementById( oprString ).value + '",' ;
+    if ( i < 10 ) {  oprString  =  'fm4FLDB0' + i ; } else { oprString  =  'fm4FLDB' + i ; } ;
+                     dataString = dataString + '"' + oprString + '":"' + document.getElementById( oprString ).value + '",' ;
+    if ( i < 10 ) {  oprString  =  'fm4FLDC0' + i ; } else { oprString  =  'fm4FLDC' + i ; } ;
+                     dataString = dataString + '"' + oprString + '":"' + document.getElementById( oprString ).value + '",' ;
+    if ( i < 10 ) {  oprString  =  'fm4FLDD0' + i ; } else { oprString  =  'fm4FLDD' + i ; } ;
+                     dataString = dataString + '"' + oprString + '":"' + document.getElementById( oprString ).value + '",' ;
+    if ( i < 10 ) {  oprString  =  'fm4FLDE0' + i ; } else { oprString  =  'fm4FLDE' + i ; } ;
+                     dataString = dataString + '"' + oprString + '":"' + document.getElementById( oprString ).value + '"' ;
+
+    if ( i < 28 ) { dataString = dataString + ','; }
+
+    }
+
+  dataString = dataString + '}';
+  // 字串轉陣列
+  var  jsonParse    =  JSON.parse( dataString );
+  // 陣列轉物件
+  var  jsonData     =  JSON.stringify( jsonParse );
+ 
+  console.log ("jsonData-->" + jsonData );
+
+  var  create09Url  =  'http://172.16.1.222:10010/web/services/WEB10R/CREATE09'      ;
+
+  let xhr = new XMLHttpRequest();                                                                                             
+  xhr.onreadystatechange = function () {                                                                                      
+    if (xhr.readyState == 4) {                                                                                                
+       console.log(xhr.status);                                                                                               
+       var jsonChkObj = JSON.parse( xhr.responseText);                                                                            
+       console.log("aa XHR-->" + JSON.stringify( jsonChkObj ));                                                               
+       alert( "機台:" + jsonChkObj.dtaOut9s.dtaFldMch + "\n" + 
+              "日期:" + jsonChkObj.dtaOut9s.dtaFldDate + "\n"  +
+              "班別:" + jsonChkObj.dtaOut9s.dtaFldGrp  + "\n" +
+              "單號:"  + jsonChkObj.dtaOut9s.dtaFldId + "-" + jsonChkObj.dtaOut9s.dtaFldNo + "\n" +
+              jsonChkObj.dtaOut9s.dtaFldRes );                                                                                                   
+       }                                                                                                                      
+    }
+    xhr.open("POST", create09Url , false );                         
+    xhr.setRequestHeader('Accept', 'application/json');           
+    xhr.setRequestHeader('Content-Type', 'application/json');     
+    xhr.send( jsonData );                      
+  }
+
+    function back(){                                        
+          requestURL="http://172.16.2.47/webbi/app01/主要作業.html";
+          requestURL = requestURL+"?" + "userId=" + aryPara.userId + "&userName=" + aryPara.userName + "&machineId=" + aryPara.machineId +
+                       "&dateId=" + aryPara.dateId +"&groupId=" + aryPara.groupId;    
+           var newWindow=window.open(requestURL,'_self');} 
+</script>
+</body>
+</html>

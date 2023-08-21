@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta content="text/html"/>
+    <meta charset="utf-8"/>
+    <title>美亞報工!</title>
+    <meta http-equiv="Content-Type" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" type="text/css" href="style.css" />
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <!-- Include the Bootstrap Table CSS for the table -->
+    <link rel="stylesheet" href="https://unpkg.com/bootstrap-table@1.16.0/dist/bootstrap-table.min.css">
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">   
+    <link href = "https://code.jquery.com/ui/1.10.4/themes/ui-lightness/jquery-ui.css"  rel = "stylesheet">
+</head> 
+<!-- style>
+      .main{
+        /*水平置中*/      
+        display:flex;
+        /*垂直置中*/
+        justify-content:center;
+        text-align:center;
+      
+  }
+       .list{
+         /*水平置中*/      
+        display:flex;
+        /*垂直置中*/
+        justify-content:center;
+        text-align:center; 
+        border-radius: 2px; 
+        cellpadding ="0" 
+        width ="100"                          
+    }
+  </style -->
+  <style>
+    .main{
+        /*水平置中*/      
+        display:flex;
+        /*垂直置中*/
+        justify-content:center;
+        text-align:center;
+        }
+    .list{
+         /*水平置中*/      
+         display:flex;
+         /*垂直置中*/
+         justify-content:center;
+         text-align:center; 
+         border-radius: 2px; 
+         cellpadding ="0" 
+         width ="100"                          
+         }
+
+     body{
+           background-color:#69F7BE
+           }
+            /* 表格样式 */
+            
+    .table>tbody>tr>td {
+                border: 2px;
+                text-align: center;
+                font-weight: bold
+                }
+            
+    .bootstrap-table .table thead>tr>th { 
+                border: 2px;
+                text-align: center;
+                font-weight: bold
+                }
+            
+                background: #ebeaea;  
+   
+  </style>
+
+  
+  <body onload="loadBody()">
+    <div class="main">     
+      <h>
+         <img src="https://cdn.glitch.global/d3fc7112-b364-45f9-8eca-982543985e7b/logo21.png?v=1676527840620" width="280px"  height="120px"/><br/>   
+         <font size="6">接頭機作業-讀取狹鋼帶條碼</font>
+          <table style = "font-size:20px;">
+           <tr>
+             <td>
+                工令:<span id="order" ></span><br/>  
+                工號:<span  id="show1"></span>
+                姓名:<span id="show2"></span>
+                機台:<span id="show3"></span>
+                班別日期:<span id="show5"></span>
+                班別:<span id="show4"></span>                
+             </td>
+           </tr>  
+        </table>  
+      </h>  
+    </div>    
+    <div class="list">
+      <form id ="myForm">       
+        <table>
+            <tr>                                               
+              <td><font size="5"><center>讀取狹鋼帶條碼</center></font></td>
+              <td><input  id="steel"  style="width:360px;height:60px;font-size:20px"  placeholder="請輸入狹鋼帶條碼"  onchange="getSplId()" /></td>
+            </tr>
+            <tr>
+              <td><span style="font-size:25px" color="blue"><center>件數</center></span>
+                  <input id ="piece" type="number" style="width:360px;height:60px;font-size:20px;text-align:right"/></td>         
+              <td><span style="font-size:25px" color="blue"><center>重量</center></span>
+                  <input id ="weight" type="number" style="width:360px;height:60px;font-size:20px; text-align: right" /></td>       
+            </tr>
+            <tr>
+              <td><input type="button"  value ="重新輸入" onclick="myFunction()" style="width:360px;height:60px;font-size:20px;color:blue"></td>
+              <td><input type="button"  value="資料上傳"  id= "upload" onclick="load()" style="width:360px;height:60px;font-size:20px;color:green"></td>
+            </tr>    
+        </table>
+  
+        <table>
+          <tr><td><label style="font-size:25px">加工說明</label></td></tr>
+          <tr>
+              <td><input  id="desc01" style="width:360px;height:40px;font-weight: bold;font-size:20px"  readonly />
+                  <input  id="desc02" style="width:360px;height:40px;font-weight: bold;font-size:20px"  readonly /></td>
+          </tr>
+          <tr>
+              <td><input  id="desc03" style="width:360px;height:40px;font-weight: bold;font-size:20px"  readonly />
+                  <input  id="desc04" style="width:360px;height:40px;font-weight: bold;font-size:20px"  readonly /></td>
+          </tr>
+        </table>
+          <br/>
+          <input type="button" onclick="back()" value ="回前一頁"  style="width:200px;height:60px;font-size:20px; color:red;"><br/><br/>    
+      </form> 
+    </div>  
+    <div class="container">
+      <table id="cmdList" class="table table-bordered  table-striped border-dark table-light">
+        <thead>
+          <tr>
+            <th data-field="cmdSplSpc"><span>狹鋼帶規格</span></th>
+            <th data-field="cmdSplSiz"><span>狹鋼帶尺寸</span></th>
+            <th data-field="cmdSplId"><span>狹鋼帶捲號</span></th>
+            <th data-field="cmdSplAdm"><span>管理號</span></th>
+            <th data-field="cmdSplCmd"><span>應領捲數</span></th>
+            <th data-field="cmdSplTot"><span>已用捲數</span></th>
+            <!-- th data-field="cmdSplStg"><span>帳上庫存</span></th -->
+            <!-- th data-field="cmdSplPrdId"><span>產品編號</span></th -->
+            <th data-field="cmdSplUseId"><span>已用鋼帶明細</span></th>
+          </tr>
+        </thead>
+      </table><br/>
+    </div>
+     <div id = "dialog-1"  title = "警告訊息">資料長度不符!</div>     
+         <p> 
+           <center>    
+            <script>
+              var txt ="日期:";
+              document.write(txt.big());           
+              date = new Date().toLocaleDateString();
+              document.write(date.big());
+            </script>
+           </center>
+          </p>         
+ 
+ 
+  <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script> 
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+  <script src = "https://code.jquery.com/jquery-1.10.2.js"></script> 
+  <script src = "https://code.jquery.com/ui/1.10.4/jquery-ui.js"></script> 
+  <script src="https://unpkg.com/bootstrap-table@1.16.0/dist/bootstrap-table.min.js"></script>
+   
+  <script>
+       
+        var strUrl = window.location.search;  
+        var getPara,paraVal;
+        var aryPara = [];
+        var userName;
+        var requestURL;
+        var pieceOutput;
+        var weightOutput;
+        var loadurl;
+        var request;
+        var steelId;
+        var jsonObj;
+        var dateStr;
+        var pieceStr;
+        var weightStr;
+                 
+        
+       loadBody = function (){                         
+          if (strUrl != -1)
+            var getSearch = strUrl.split("?");
+            getPara = getSearch[1].split("&");
+              for (i = 0; i < getPara.length; i++){
+                 paraVal = getPara[i].split("=");
+                 aryPara.push(paraVal[0]);                
+                 aryPara[paraVal[0]]=paraVal[1];
+                 }              
+                    
+               document.getElementById("show1").innerHTML=aryPara.userId;
+               userName = decodeURIComponent(aryPara.userName);
+               document.getElementById("show2").innerHTML=userName;
+               document.getElementById("show3").innerHTML=aryPara.machineId;
+               document.getElementById("show4").innerHTML=aryPara.groupId; 
+               document.getElementById("show5").innerHTML=aryPara.dateId;
+               document.getElementById("order").innerHTML=aryPara.orderId;
+               document.getElementById("steel").focus();
+
+               loadSplData();
+
+               loadSplDesc();
+
+               $(function() {
+                 $( "#dialog-1" ).dialog({
+                   autoOpen: false,});
+                 });               
+         }
+
+
+        //************************************************************
+        //*
+        //*
+        //************************************************************
+        function loadSplDesc(){
+          var descOrderId = aryPara.orderId;
+              descOrderId = descOrderId.toString().padEnd(12,'_'); 
+          var descSplUrl = "http://172.16.1.222:10010/web/services/WEB10R/" 
+                         + "DES" + aryPara.machineId + aryPara.dateId + aryPara.groupId + descOrderId ;
+          if(window.XMLHttpRequest){    
+              reqDesc=new XMLHttpRequest();                 
+              }
+
+          reqDesc.onreadystatechange = function() {
+            if (reqDesc.readyState == 4 && reqDesc.status == 200) {
+               var jsonObjDesc   = JSON.parse(reqDesc.responseText);   
+               var newMyDataDesc = jsonObjDesc.getCmdDta.cmdPrdDesc1;
+               document.getElementById("desc01").value = "1." + jsonObjDesc.getCmdDta.cmdPrdDesc1 ;
+               document.getElementById("desc02").value = "2." + jsonObjDesc.getCmdDta.cmdPrdDesc2 ;
+               document.getElementById("desc03").value = "3." + jsonObjDesc.getCmdDta.cmdPrdDesc3 ;
+               document.getElementById("desc04").value = "4." + jsonObjDesc.getCmdDta.cmdPrdDesc4 ;
+               } 
+            }  
+          reqDesc.open("GET", descSplUrl ,'_self', true);
+          reqDesc.send();
+          }
+
+
+
+     
+        //************************************************************
+        //*
+        //*
+        //************************************************************
+        function loadSplData(){
+          var loadOrderId = aryPara.orderId;
+              loadOrderId = loadOrderId.toString().padEnd(12,'_'); 
+          var loadSplUrl = "http://172.16.1.222:10010/web/services/WEB10R/" 
+                         + "SLTC" + aryPara.machineId + aryPara.dateId + aryPara.groupId + loadOrderId ;
+
+          if(window.XMLHttpRequest){    
+              reqLoad=new XMLHttpRequest();                 
+              }
+
+          reqLoad.onreadystatechange = function() {
+            if (reqLoad.readyState == 4 && reqLoad.status == 200) {
+               jsonObjLoad = JSON.parse(reqLoad.responseText);   
+               newMyDataLoad = JSON.stringify( jsonObjLoad.cmdPrdSpls );
+               newMyData0x = jsonObjLoad.cmdPrdSpls;
+               loadFinish = "Y";
+               $('#cmdList').bootstrapTable({ 
+                 data: newMyData0x,
+                 height : 450,
+                 pageSize : 50 //一頁顯示幾筆
+                 })
+               }
+            }  
+          reqLoad.open("GET", loadSplUrl ,'_self', true);
+          reqLoad.send();
+          }
+
+
+
+        function load(){  
+            loadurl = "http://172.16.1.222:10010/web/services/WEB10R/";      //use any url that have json data 
+            steelId=document.getElementById("steel").value;
+                                                                                  
+            url = loadurl + steelId;  
+                        
+            if(window.XMLHttpRequest){    
+              request=new XMLHttpRequest();                    //for Chrome, mozilla etc  
+              }                 
+               request.onreadystatechange = function(){
+                 if (request.readyState == 4  ) 
+                   {
+                    jsonObj = JSON.parse(request.responseText);      //JSON.parse() returns JSON object
+                    markOutput = jsonObj.chkSplDta.splCoilTxt;
+                    reasonOutput = jsonObj.chkSplDta.splCoilRes; 
+                                                       
+                      if (markOutput ==="SUC"){                                
+                        dateStr = aryPara.dateId.replace(/\-/g,"");   
+                        pieceOutput = document.getElementById("piece").value;
+                        pieceStr = pieceOutput.toString().padStart(5,'0');
+                        
+                        weightOutput = document.getElementById("weight").value; 
+                        weightStr =  weightOutput.toString().padStart(6,'0');                         
+                        aryPara.orderId =  aryPara.orderId.toString().padEnd(12,'_');
+                      
+                                  
+                          requestUpload=new XMLHttpRequest();  //資料上傳                                                              
+                          var Uploadurl = loadurl + aryPara.userId + aryPara.machineId + 
+                              dateStr + aryPara.groupId + aryPara.orderId + steelId + pieceStr + weightStr +"ADD";                         
+                          requestUpload.open("GET", Uploadurl,'_self', true);
+                          requestUpload.send();   
+                          requestUpload.onreadystatechange = function(){                                    
+                            if (requestUpload.readyState == 4  ) {                                          
+                               var jsonUploadObj = JSON.parse(requestUpload.responseText);                                       
+                               var reasonUpload = jsonUploadObj.oprSplDta.resultTxt;
+                               alert(reasonUpload); 
+                               location.reload();
+                               document.getElementById("steel").focus();
+                             }                                     
+                           }                            
+                        } 
+                        else 
+                          if(markOutput ==="FAU"){
+                            alert(reasonOutput);
+                            location.reload();
+                            document.getElementById("steel").focus();  
+                        } 
+                      }  
+                  }
+               request.open("GET" , url, true);
+               request.send();                      
+            }    
+          
+       function getSplId(){  
+            var urlSplCoil = "http://172.16.1.222:10010/web/services/WEB10R/";      //use any url that have json data 
+            var requestSplId;
+            var steelSplId=document.getElementById("steel").value;  
+            var steelString = document.getElementById("steel").value.toString();
+            var steelUrl="";    
+            var steelChar="";    
+                       
+//            document.getElementById("upload").focus();
+
+            if (aryPara.orderId.substr(0,1) == "3"){                                     //工令 3 開頭 狹鋼帶開頭加 "3#" 
+              var strSteel = '3_'+ steelSplId.substr(0,10);
+              steelString = strSteel + steelSplId.substr(12,12);}
+                                        
+            if (steelSplId.length != 22){
+                 $(function() {
+                  $( "#dialog-1" ).dialog({
+                    autoOpen: true,
+                    position:{ my: "center-10% center-90%", at: "center center", of: window} ,  
+                    height: 100,
+                    width: 300,                                                                                                                            
+                    });                 
+                 });    
+                 setTimeout(function(){ $("#dialog-1").dialog('close')}, 1000);    
+                 document.getElementById("steel").focus();             
+              } 
+                            
+              
+            if (steelString.length ==22){                          
+              for (i = 1; i <= steelSplId.length ; i++){
+                  j = i - 1;
+                  steelChar = steelString.substr(j , 1);
+                  if   (steelChar >="a" && steelChar <="z") { steelUrl=steelUrl + steelChar; }
+                    else if (steelChar >="A" && steelChar<="Z") { steelUrl=steelUrl + steelChar; }
+                      else if (steelChar >="0" && steelChar<="9") { steelUrl=steelUrl + steelChar; }
+                        else {steelUrl = steelUrl + "_"; }
+                  } 
+            } 
+            
+            document.getElementById("steel").value = steelUrl;                      
+            urlSplCoil = urlSplCoil + steelUrl;
+                        
+            if(window.XMLHttpRequest){    
+              requestSplId=new XMLHttpRequest();                    //for Chrome, mozilla etc  
+              }                 
+               requestSplId.onreadystatechange = function(){
+                 if (requestSplId.readyState == 4  ) 
+                   {
+                      var jsonSplObj = JSON.parse(requestSplId.responseText);      //JSON.parse() returns JSON object
+                          pieceSplId= jsonSplObj.chkSplDta.splCoilPcs;                   
+                          weightSplId= jsonSplObj.chkSplDta.splCoilWgt;
+                          
+                      var markOutput = jsonSplObj.chkSplDta.splCoilTxt;
+                      var reasonOutput = jsonSplObj.chkSplDta.splCoilRes;
+                        if (markOutput ==="SUC"){ 
+                           document.getElementById("piece").value=parseInt(jsonSplObj.chkSplDta.splCoilPcs);
+                           document.getElementById("weight").value=parseInt(jsonSplObj.chkSplDta.splCoilWgt);
+                           document.getElementById("upload").focus();
+                           load();
+                        } else 
+                          if(markOutput ==="FAU"){
+                            alert(reasonOutput);
+                            location.reload();
+                            document.getElementById("steel").focus();  
+                          }                          
+                    }                                               
+                }
+                 requestSplId.open("GET" , urlSplCoil , true );
+                 requestSplId.send();  
+          }              
+         
+         function myFunction() {
+         document.getElementById("myForm").reset();
+         document.getElementById("steel").focus();  
+         } 
+ 
+         function back(){                                        
+           requestURL="http://172.16.2.47/webbi/app01/接頭作業/接頭機作業.html";
+           requestURL = requestURL+"?" + "userId=" + aryPara.userId + "&userName=" + userName + "&machineId=" + aryPara.machineId +
+                         "&dateId=" + aryPara.dateId +"&groupId=" + aryPara.groupId;    
+           var newWindow=window.open(requestURL,'_self');}  
+                              
+    </script>  
+    </body>
+  </html>

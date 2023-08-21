@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta content="text/html"/>
+    <meta charset="utf-8"/>
+    <title>美亞報工!</title>
+    <meta http-equiv="Content-Type" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" type="text/css" href="style.css" />
+     </head> 
+<style>
+      .main{
+        /*水平置中*/      
+        display:flex;
+        /*垂直置中*/
+        justify-content:center;
+        text-align:center;
+  }
+       .list{
+         /*水平置中*/      
+        display:flex;
+        /*垂直置中*/
+        justify-content:center;
+        text-align:center; 
+        border-radius: 1px; 
+        cellpadding ="0";
+        width ="100";        
+   }
+         
+  </style>
+  <body onload="loadBody()">
+    <div class="main">
+      <h>
+        <img src="https://cdn.glitch.global/d3fc7112-b364-45f9-8eca-982543985e7b/logo21.png?v=1676527840620" width="280px"  height="120px"/><br/>  
+        <font size="6">絞毛頭機作業-掛籤預覽列印</font>
+         <table style = "font-size:20px;">
+           <tr>
+            <td>
+                工令:<span id="order" ></span><br/>
+                工號:<span  id="show1"></span>
+                姓名:<span id="show2"></span>
+                機台:<span id="show3"></span>
+                班別日期:<span id="show5"></span>
+                班別:<span id="show4"></span>                
+             </td>
+           </tr>  
+        </table>  
+      </h>  
+    </div>
+    
+      <dir class="list">       
+        <table border="1">
+          <tbody>                     
+            <tr>
+              <td><span   style="font-size:25px;color=blue"><center>單號別</center></span></td>
+                  <td><textarea id ="ordNo"  type="text" readonly = "readonly" style="width:300px;height:60px;font-size:20px;margin:0 auto;text-align:center"></textarea></td>
+              <td><span   style="font-size:25px;color=blue"><center>客  戶</center></span></td>
+                  <td><textarea id ="cusName"  type="text" readonly = "readonly" style="width:300px;height:60px;font-size:20px;margin:0 auto;text-align:center"></textarea></td>
+            </tr>
+            <tr>
+              <td><span   style="font-size:25px;color=blue"><center>工　令</center></span></td>
+                  <td><textarea id ="cmdId"  type="text" readonly = "readonly" style="width:300px;height:60px;font-size:20px;margin:0 auto;text-align:center"></textarea></td>
+              <td><span   style="font-size:25px;color=blue"><center>品　名</center></span></td>
+                  <td><textarea id ="prdSpec"  type="text" readonly = "readonly" style="width:300px;height:60px;font-size:20px;margin:0 auto;text-align:center"></textarea></td>
+            </tr>
+            <tr>
+              <td><span   style="font-size:25px;color=blue"><center>尺　寸</center></span></td>
+                  <td><textarea id ="prdSize"  type="text" readonly = "readonly" style="width:300px;height:60px;font-size:20px;margin:0 auto;text-align:center"></textarea></td>
+              <td><span   style="font-size:25px;color=blue"><center>材　質</center></span></td>
+                  <td><textarea id ="prdMat"  type="text" readonly = "readonly" style="width:300px;height:60px;font-size:20px;margin:0 auto;text-align:center"></textarea></td>
+            </tr>
+            <tr>
+              <td><span   style="font-size:25px;color=blue"><center>綑　號</center></span></td>
+                  <td><textarea id ="prdBnd"  type="text" readonly = "readonly" style="width:300px;height:60px;font-size:20px;margin:0 auto;text-align:center"></textarea></td>
+              <td><span   style="font-size:25px;color=blue"><center>件　數</center></span></td>
+                  <td><textarea id ="prdPcs"  type="text" readonly = "readonly" style="width:300px;height:60px;font-size:20px;margin:0 auto;text-align:center"></textarea></td>
+            </tr>
+            <tr>
+              <td><span   style="font-size:25px;color=blue"><center>重　量</center></span></td>
+                  <td><textarea id ="prdWgt" type="text" readonly = "readonly" style="width:300px;height:60px;font-size:20px;text-align:center"></textarea></td>
+              <td><span   style="font-size:25px;color=blue"><center>製管日</center></span></td>
+                  <td><textarea id ="prdDay" type="text" readonly = "readonly" style="width:300px;height:60px;font-size:20px;text-align:center"></textarea></td>
+            </tr>
+            <tr>
+              <td><span   style="font-size:25px;color=blue"><center>製管者</center></span></td>
+                  <td><textarea id ="prdMaker" type="text" readonly = "readonly" style="width:300px;height:60px;font-size:20px;text-align:left"></textarea></td>
+              <td><span   style="font-size:25px;color=blue"><center>鍍鋅者</center></span></td>
+                  <td><textarea id ="prdZiner" type="text" readonly = "readonly" style="width:300px;height:60px;font-size:20px;text-align:left"></textarea></td>
+            </tr>
+            <tr>
+              <td><span   style="font-size:25px;color=blue"><center>備　註</center></span></td>
+                  <td><textarea id ="prdRemark01" type="text" readonly = "readonly" style="width:300px;height:60px;font-size:20px;text-align:left"></textarea></td>
+              <td><span   style="font-size:25px;color=blue"><center>備　註</center></span></td>
+                  <td><textarea id ="prdRemark02" type="text" readonly = "readonly" style="width:300px;height:60px;font-size:20px;text-align:left"></textarea></td>
+            </tr>
+            <tr><td></td>
+              <td><input type="button"  value="列印一張"  id="btn01" onclick="loadBtn01()" style="width:300px;height:60px;font-size:20px;" /></td>
+              <td></td>
+              <td><input type="button"  value="列印兩張"  id="btn02" onclick="loadBtn02()" style="width:300px;height:60px;font-size:20px;" /></td>
+            </tr>
+          </tbody>
+        </table>
+      </dir>  
+    
+        <p>   
+          <center>  
+            <input type="button" onclick="back()" value ="回前一頁"  style="width:300px;height:60px;font-size:20px; color:red;"><br/><br/>                                                                  
+             <script>
+              var txt ="日期:";
+              document.write(txt.big());           
+              date = new Date().toLocaleDateString();
+              document.write(date.big());
+            </script>
+          </center>  
+         </p>           
+  
+   <script>
+       
+        var strUrl = window.location.search; 
+        var getPara,paraVal;
+        var aryPara = [];
+        var userName;
+        var requestURL;
+        var pieceOutput;
+        var weightOutput;
+        var loadurl;
+        var request;
+        var steelId;
+        var jsonObj;
+        var dateStr;
+        var pieceStr;
+        var weightStr;       
+        var orderId0, orderId1;      
+        var prtOrdNo;  
+        var prdType;
+
+//*****************************
+//進入網頁後立即執行功能作業       *
+//*****************************             
+       loadBody = function (){                         
+          if (strUrl != -1){
+            var getSearch = strUrl.split("?");
+            getPara = getSearch[1].split("&");
+              for (i = 0; i < getPara.length; i++){
+                 paraVal = getPara[i].split("=");
+                 aryPara.push(paraVal[0]);                
+                 aryPara[paraVal[0]]=paraVal[1];
+               }                            
+               orderId0 = aryPara.orderId;
+               orderId1 = orderId0.replace(/\_/g,"");               
+               document.getElementById("show1").innerHTML=aryPara.userId;
+               userName = decodeURIComponent(aryPara.userName);
+               document.getElementById("show2").innerHTML = userName;
+               document.getElementById("show3").innerHTML = aryPara.machineId;
+               document.getElementById("show4").innerHTML = aryPara.groupId; 
+               document.getElementById("show5").innerHTML = aryPara.dateId;
+               document.getElementById("order").innerHTML = orderId1;  
+               document.getElementById("ordNo").value     = aryPara.prtId;
+               prdType  =  aryPara.prdType;
+               if  (prdType == "C"){ document.getElementById("prdRemark01").value = "接" }
+               document.getElementById("btn01").focus();
+               loadDefault();
+            }
+          }
+
+//***********************************************
+//*立即執行作業中, 依單據號碼讀取在製品掛籤資料        *
+//***********************************************
+        function loadDefault(){
+          loadurl = "http://172.16.1.222:10010/web/services/WEB10R/GET";      //use any url that have json data 
+          url     = loadurl + document.getElementById("ordNo").value;            
+          
+            if(window.XMLHttpRequest){    
+              request=new XMLHttpRequest();                    //for Chrome, mozilla etc  
+              }                 
+              request.onreadystatechange = function(){
+                if (request.readyState == 4  ) 
+                  {
+                   jsonObj = JSON.parse(request.responseText)   ;      //JSON.parse() returns JSON object
+                   reasonOutput = jsonObj.getP59aDta.getP59aTxt ;                                                    
+                     if (reasonOutput ==="SUC"){  
+                        document.getElementById("cusName").value    =  jsonObj.getP59aDta.getP59aCus;                     
+                        document.getElementById("cmdId").value      =  jsonObj.getP59aDta.getP59a008;    
+                        document.getElementById("prdSpec").value    =  jsonObj.getP59aDta.getP59a012A;
+                        document.getElementById("prdSize").value    =  jsonObj.getP59aDta.getP59a012B;
+                        document.getElementById("prdMat").value     =  jsonObj.getP59aDta.getP59a012C;
+                        document.getElementById("prdPcs").value     =  jsonObj.getP59aDta.getP59a013;
+                        document.getElementById("prdWgt").value     =  jsonObj.getP59aDta.getP59a014;   
+                        document.getElementById("prdBnd").value     =  jsonObj.getP59aDta.getP59a901;   
+                        document.getElementById("prdMaker").value   =  jsonObj.getP59aDta.getP59aMaker; 
+                        document.getElementById("prdDay").value     =  jsonObj.getP59aDta.getP59aDay;
+                        }           
+                     else 
+                        if(reasonOutput ==="FAU"){
+                          alert(reasonOutput);} 
+                     }     
+                 }
+              request.open("GET" , url, true);
+              request.send();                      
+            }    
+
+//***********************************************
+//*使用者按下列印一頁後, 立即執行列印, 然後回前頁     *
+//***********************************************
+        function loadBtn01(){
+          loadurl = "http://172.16.1.222:10010/web/services/WEB10R/";      //use any url that have json data 
+          url     = loadurl + "PRT" + "_" + aryPara.userId + document.getElementById("ordNo").value  
+                                                           + document.getElementById("ordNo").value.substr(3 , 9)       
+                                                           + "001";
+
+            if(window.XMLHttpRequest){    
+              request=new XMLHttpRequest();                    //for Chrome, mozilla etc  
+              }                 
+              request.onreadystatechange = function(){
+                if (request.readyState == 4  ) 
+                  {
+                   jsonObj = JSON.parse(request.responseText)   ;      //JSON.parse() returns JSON object
+                   reasonOutput = jsonObj.prtP59aDta.prtP59aTxt ;                                                    
+                     if (reasonOutput ==="SUC"){  
+                        alert( jsonObj.prtP59aDta.prtP59aRes );
+                        back();
+                        }           
+                     else 
+                        if(reasonOutput ==="FAU"){
+                          alert("無此單據!!" + reasonOutput);
+                          back();
+                          }
+                     }     
+                 }
+              request.open("GET" , url, true);
+              request.send();                      
+            }    
+
+
+//***********************************************
+//*使用者按下列印兩頁後, 立即執行列印, 然後回前頁      *
+//***********************************************
+        function loadBtn02(){
+          loadurl = "http://172.16.1.222:10010/web/services/WEB10R/";      //use any url that have json data 
+          url     = loadurl + "PRT" + "_" + aryPara.userId + document.getElementById("ordNo").value  
+                                                           + document.getElementById("ordNo").value.substr(3 , 9)       
+                                                           + "002";
+
+            if(window.XMLHttpRequest){    
+              request=new XMLHttpRequest();                    //for Chrome, mozilla etc  
+              }                 
+              request.onreadystatechange = function(){
+                if (request.readyState == 4  ) 
+                  {
+                   jsonObj = JSON.parse(request.responseText)   ;      //JSON.parse() returns JSON object
+                   reasonOutput = jsonObj.prtP59aDta.prtP59aTxt ;                                                    
+                     if (reasonOutput ==="SUC"){  
+                        alert( jsonObj.prtP59aDta.prtP59aRes );
+                        back();
+                        }           
+                     else 
+                        if(reasonOutput ==="FAU"){
+                          alert("無此單據!!" + reasonOutput);
+                          back();
+                          } 
+                     }     
+                 }
+              request.open("GET" , url, true);
+              request.send();                      
+            }    
+
+
+//***********************************************
+//*使用者按下回上一頁後, 立即執行回上一頁                    *
+//***********************************************
+          function back(){                                      
+            let requestURL ="http://172.16.2.47/webbi/app01/絞毛頭機作業/讀取成品料號條碼.html";
+            requestURL = requestURL+"?" + "userId=" + aryPara.userId + "&userName=" + userName + "&machineId=" + aryPara.machineId +
+                        "&dateId=" + aryPara.dateId +"&groupId=" + aryPara.groupId+"&orderId=" + orderId0;  
+            var newWindow=window.open(requestURL,'_self'); 
+            }  
+                              
+    </script>  
+    </body>
+  </html>
